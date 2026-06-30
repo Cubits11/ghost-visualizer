@@ -12,8 +12,8 @@ Frame ranges below are start-inclusive and end-exclusive.
 | Number feels official | 0:03-0:06 | 90-180 | The published 90% score is centered and treated like an official point estimate. |
 | Guardrails appear | 0:06-0:09 | 180-270 | Guardrail A and Guardrail B both show 90% visible marginals. |
 | False inference | 0:09-0:12 | 270-360 | "Therefore: safe?" appears as an intentionally fragile inference. |
-| Hanging pause | 0:12-0:15 | 360-450 | The inference holds without support. |
-| Hidden variable revealed | 0:15-0:18 | 450-540 | Shared miss overlap enters as the missing variable. |
+| Hanging pause | 0:12-0:14.2 | 360-426 | The inference holds without support. |
+| Hidden variable revealed | 0:14.2-0:18 | 426-540 | Shared miss overlap enters as the missing variable. |
 | Crack | 0:18-0:20 | 540-600 | The point estimate fractures. |
 | World split enters | 0:20-0:34 | 600-1020 | Two 100-dot worlds show separated misses versus aligned shared misses. |
 | Interval reveal | 0:34-0:48 | 1020-1440 | The 90% point estimate becomes the honest [90%, 100%] composed-safety interval. |

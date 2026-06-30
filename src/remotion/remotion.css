@@ -389,7 +389,7 @@
 }
 
 .dot-neutral {
-  fill: rgba(155, 170, 190, 0.26);
+  fill: rgba(155, 170, 190, 0.2);
 }
 
 .dot-aOnly {
@@ -402,7 +402,7 @@
 
 .dot-shared {
   fill: var(--r-danger);
-  filter: drop-shadow(0 0 12px rgba(255, 122, 92, 0.66));
+  filter: drop-shadow(0 0 16px rgba(255, 122, 92, 0.78));
 }
 
 .risk-chip {
@@ -646,7 +646,7 @@
 
 .receipt-line {
   display: grid;
-  grid-template-columns: 190px 1fr;
+  grid-template-columns: 220px 1fr;
   gap: 18px;
   padding: 14px 0;
   border-top: 1px solid var(--r-line);
@@ -939,12 +939,16 @@
 
 .receipt-showcase {
   display: grid;
-  grid-template-columns: 1fr 0.8fr;
+  grid-template-columns: 0.95fr 1.05fr;
   gap: 14px;
 }
 
 .receipt-showcase .receipt-panel {
   padding: 20px;
+  width: 116%;
+  height: 116%;
+  scale: 0.86;
+  transform-origin: top left;
 }
 
 .receipt-showcase .receipt-panel p {
@@ -965,15 +969,25 @@
 .receipt-showcase .non-claim-panel {
   grid-column: auto;
   padding: 16px;
+  gap: 10px;
+  width: 116%;
+  height: 116%;
+  scale: 0.86;
+  transform-origin: top left;
 }
 
 .receipt-showcase .non-claim-panel div {
   grid-template-columns: 1fr;
+  gap: 8px;
 }
 
 .receipt-showcase .non-claim-panel div span {
-  font-size: 11px;
-  padding: 8px;
+  font-size: 10px;
+  padding: 7px 8px;
+}
+
+.receipt-showcase .non-claim-panel div span:nth-child(n + 2) {
+  display: none;
 }
 
 .artifact-showcase .artifact-file {

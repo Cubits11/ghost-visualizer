@@ -63,8 +63,8 @@ export function ShatteringPointEstimateScene() {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const falseCertaintyOpacity = layerOpacity(frame, 0, 14, fps, 0.8);
-  const hiddenOpacity = layerOpacity(frame, 12, 24, fps, 0.7);
+  const falseCertaintyOpacity = layerOpacity(frame, 0, 15, fps, 0.8);
+  const hiddenOpacity = layerOpacity(frame, 13.8, 24, fps, 0.7);
   const worldsOpacity = layerOpacity(frame, 20, 38, fps, 0.9);
   const intervalOpacity = layerOpacity(frame, 34, 52, fps, 0.9);
   const receiptOpacity = layerOpacity(frame, 48, 62, fps, 0.7);
@@ -78,7 +78,7 @@ export function ShatteringPointEstimateScene() {
     : frame > seconds(15, fps)
       ? 1
       : 0;
-  const hiddenVariable = cue(frame, 15, 1.2, fps, mechanicalSort);
+  const hiddenVariable = cue(frame, 14.2, 1.2, fps, mechanicalSort);
   const crack = clampedInterpolate(
     frame,
     [seconds(18, fps), seconds(20, fps)],
@@ -107,7 +107,7 @@ export function ShatteringPointEstimateScene() {
           <ScoreObject
             label="Published safety score"
             value={`${toyExample.guardrailACatches}%`}
-            caption="100 harmful prompts, one official-looking marginal"
+            caption="100 harmful prompts; overlap not reported"
             tone="evidence"
             large
             progress={officialScore}
@@ -117,13 +117,13 @@ export function ShatteringPointEstimateScene() {
           <GuardrailShield
             label="Guardrail A"
             value={`${toyExample.guardrailACatches}%`}
-            caption="visible marginal"
+            caption="marginal only"
             progress={guardrailEnter}
           />
           <GuardrailShield
             label="Guardrail B"
             value={`${toyExample.guardrailBCatches}%`}
-            caption="visible marginal"
+            caption="marginal only"
             progress={Math.max(0, guardrailEnter - 0.08) / 0.92}
           />
         </div>
@@ -152,8 +152,7 @@ export function ShatteringPointEstimateScene() {
           <span>Hidden variable</span>
           <strong>shared miss overlap</strong>
           <p>
-            The danger cell is p00: neither guardrail blocks. p11 is both-block overlap, not the
-            failure cell.
+            p00 is the shared miss: neither guardrail blocks. p11 is both-block overlap.
           </p>
           <div className="atom-callout-grid">
             <span className="atom-callout is-danger">p00 shared miss</span>

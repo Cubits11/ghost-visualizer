@@ -163,7 +163,7 @@ export function DotGrid100({
           <p>{subtitle}</p>
         </div>
         <div className="risk-chip">
-          <span>sharedMissRate</span>
+          <span>shared miss</span>
           <strong>{sharedCount}%</strong>
         </div>
       </header>
@@ -180,7 +180,7 @@ export function DotGrid100({
               className={`remotion-dot dot-${kind}`}
               cx={offset + col * gap}
               cy={offset + row * gap}
-              r={kind === "shared" ? 7.4 : kind === "neutral" ? 4.6 : 5.8}
+              r={kind === "shared" ? 8.6 : kind === "neutral" ? 4.2 : 5.8}
               style={{
                 opacity: 0.12 + p * 0.88,
                 transform: `scale(${0.68 + p * 0.32})`,
@@ -274,14 +274,27 @@ export function AtomTablePanel({
 export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
   const p = clamp01(progress);
   const lines = [
-    ["metric", sampleReceipt.boundedClaim.metric],
-    ["blockOverlap", `${Math.round(sampleReceipt.harmful.blockOverlap * 100)}% p11 both-block overlap`],
-    [
-      "sharedMissRate",
-      `${Math.round(sampleReceipt.harmful.sharedMissRate * 100)}% p00 shared miss danger cell`,
-    ],
-    ["witnesses", `${sampleReceipt.witnesses.length} endpoint witnesses attached`],
-    ["nonClaims", `${sampleReceipt.nonClaims.length} blocked assertions`],
+    { key: "metric", label: "Metric", value: sampleReceipt.boundedClaim.metric },
+    {
+      key: "blockOverlap",
+      label: "p11 block overlap",
+      value: `${Math.round(sampleReceipt.harmful.blockOverlap * 100)}% both block`,
+    },
+    {
+      key: "sharedMissRate",
+      label: "p00 shared miss",
+      value: `${Math.round(sampleReceipt.harmful.sharedMissRate * 100)}% danger cell`,
+    },
+    {
+      key: "witnesses",
+      label: "Endpoint witnesses",
+      value: `${sampleReceipt.witnesses.length} attached`,
+    },
+    {
+      key: "nonClaims",
+      label: "Non-claims",
+      value: `${sampleReceipt.nonClaims.length} blocked assertions`,
+    },
   ];
 
   return (
@@ -298,7 +311,7 @@ export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
       </div>
       <p>{sampleReceipt.boundedClaim.statement}</p>
       <div className="receipt-lines">
-        {lines.map(([key, value], index) => {
+        {lines.map(({ key, label, value }, index) => {
           const lineP = clamp01(p * 1.35 - index * 0.12);
 
           return (
@@ -310,7 +323,7 @@ export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
                 transform: `translateX(${(1 - lineP) * 18}px)`,
               }}
             >
-              <span>{key}</span>
+              <span>{label}</span>
               <strong>{value}</strong>
             </div>
           );

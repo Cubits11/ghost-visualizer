@@ -28,7 +28,7 @@ export function ComponentShowcase() {
           <ScoreObject
             label="ScoreObject"
             value={`${toyExample.guardrailACatches}%`}
-            caption="equivalent score component without browser motion"
+            caption="marginal score; overlap not reported"
             tone="evidence"
             progress={enter}
           />
@@ -36,13 +36,13 @@ export function ComponentShowcase() {
             <GuardrailShield
               label="Guardrail A"
               value="90%"
-              caption="visible marginal"
+              caption="marginal only"
               progress={enter}
             />
             <GuardrailShield
               label="Guardrail B"
               value="90%"
-              caption="visible marginal"
+              caption="marginal only"
               progress={enter}
             />
           </div>
