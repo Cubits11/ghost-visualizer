@@ -1,4 +1,6 @@
-export interface AtomCounts {
+import { sampleReceipt } from "../evidence/sampleReceipt";
+
+export interface FailureAtomCounts {
   neither: number;
   aOnly: number;
   bOnly: number;
@@ -6,28 +8,40 @@ export interface AtomCounts {
   total: number;
 }
 
+export type AtomCounts = FailureAtomCounts;
+
+const harmful = sampleReceipt.harmful;
+const lowerWitness = sampleReceipt.witnesses.find((witness) => witness.kind === "lower-bound");
+const upperWitness = sampleReceipt.witnesses.find((witness) => witness.kind === "upper-bound");
+const guardrailAFailures = harmful.n - harmful.atomCounts.p10 - harmful.atomCounts.p11;
+const guardrailBFailures = harmful.n - harmful.atomCounts.p01 - harmful.atomCounts.p11;
+
 export const toyExample = {
-  total: 100,
-  harmfulPrompts: 100,
-  guardrailACatches: 90,
-  guardrailBCatches: 90,
-  guardrailAFailures: 10,
-  guardrailBFailures: 10,
-  independenceOverlap: 1,
-  minOverlap: 0,
-  maxOverlap: 10,
+  total: harmful.n,
+  harmfulPrompts: harmful.n,
+  guardrailACatches: harmful.atomCounts.p10 + harmful.atomCounts.p11,
+  guardrailBCatches: harmful.atomCounts.p01 + harmful.atomCounts.p11,
+  guardrailAFailures,
+  guardrailBFailures,
+  independenceOverlap: (guardrailAFailures * guardrailBFailures) / harmful.n,
+  minOverlap: Math.max(0, guardrailAFailures + guardrailBFailures - harmful.n),
+  maxOverlap: Math.min(guardrailAFailures, guardrailBFailures),
 };
 
 export const boundedClaim = {
-  riskLower: 0,
-  riskUpper: 10,
-  safetyLower: 90,
-  safetyUpper: 100,
-  policyHash: "policy-demo-a13f9c8b",
-  datasetHash: "toy-harmful-prompts-100-4d2e91",
-  witnessLowerHash: "witness-safety-lower-bc90",
-  witnessUpperHash: "witness-safety-upper-fa100",
+  riskLower: Math.round((1 - sampleReceipt.boundedClaim.upper) * 100),
+  riskUpper: Math.round((1 - sampleReceipt.boundedClaim.lower) * 100),
+  safetyLower: Math.round(sampleReceipt.boundedClaim.lower * 100),
+  safetyUpper: Math.round(sampleReceipt.boundedClaim.upper * 100),
+  policyId: sampleReceipt.policyId,
+  datasetId: sampleReceipt.datasetId,
+  witnessLowerId: lowerWitness?.id ?? "missing-lower-witness",
+  witnessUpperId: upperWitness?.id ?? "missing-upper-witness",
 };
+
+export const independenceBaselineSafety = Math.round(
+  (1 - (1 - harmful.marginalA) * (1 - harmful.marginalB)) * 100,
+);
 
 export function clampOverlap(overlapFailures: number) {
   return Math.min(
@@ -36,7 +50,9 @@ export function clampOverlap(overlapFailures: number) {
   );
 }
 
-export function atomsForOverlap(overlapFailures: number): AtomCounts {
+// Failure atoms are used only for the animated miss map. The formal math core
+// uses block atoms: p00 means neither blocks, not neither fails.
+export function atomsForOverlap(overlapFailures: number): FailureAtomCounts {
   const both = clampOverlap(overlapFailures);
   const aOnly = toyExample.guardrailAFailures - both;
   const bOnly = toyExample.guardrailBFailures - both;
@@ -61,6 +77,10 @@ export function composedSafety(overlapFailures: number) {
 
 export function formatPercent(value: number, digits = 0) {
   return `${value.toFixed(digits)}%`;
+}
+
+export function rateToPercent(value: number, digits = 0) {
+  return formatPercent(value * 100, digits);
 }
 
 export function atomPercent(count: number, total = toyExample.total) {

@@ -1,4 +1,5 @@
 import { PropsWithChildren, useEffect, useMemo, type CSSProperties } from "react";
+import { FileSearch } from "lucide-react";
 import {
   SceneSpec,
   recordingDurationBySceneId,
@@ -18,6 +19,7 @@ interface CinematicShellProps extends PropsWithChildren {
   onSelectScene: (index: number) => void;
   onTogglePaused: () => void;
   onToggleRecording: () => void;
+  onOpenEvidence: () => void;
 }
 
 export function CinematicShell({
@@ -31,6 +33,7 @@ export function CinematicShell({
   onSelectScene,
   onTogglePaused,
   onToggleRecording,
+  onOpenEvidence,
   children,
 }: CinematicShellProps) {
   const sceneDurationMs = recordingDurationBySceneId[activeScene.id];
@@ -112,6 +115,10 @@ export function CinematicShell({
         <div className="chrome-meta">
           <span>{activeScene.number}</span>
           <strong>{activeScene.title}</strong>
+          <button type="button" className="chrome-evidence-button" onClick={onOpenEvidence}>
+            <FileSearch aria-hidden="true" />
+            Evidence
+          </button>
         </div>
       </header>
 

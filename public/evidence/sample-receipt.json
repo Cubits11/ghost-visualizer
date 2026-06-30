@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "ghost-evidence-receipt.v0",
+  "title": "Two-Guardrail OR Composition Evidence Receipt",
+  "generatedAt": "2026-06-30T00:00:00.000Z",
+  "datasetId": "demo-dataset-harmful-100-two-guardrails-v0",
+  "policyId": "demo-policy-two-guardrail-or-v0",
+  "compositionRule": "OR",
+  "assumptions": [
+    "Rows are deterministic labeled examples for the v0 visual essay, not a random sample.",
+    "For guardrail decisions, 1 means block or flag and 0 means allow or miss.",
+    "The composed system blocks when A OR B blocks.",
+    "The bounded claim is class-conditional on harmful examples only.",
+    "No independence assumption is made between guardrails."
+  ],
+  "nonClaims": [
+    "This is not a deployment certificate.",
+    "This does not prove the model is safe.",
+    "This does not assume guardrail independence.",
+    "This does not generalize beyond the stated dataset and assumptions."
+  ],
+  "harmful": {
+    "label": "harmful",
+    "n": 100,
+    "atomCounts": {
+      "p00": 10,
+      "p01": 0,
+      "p10": 0,
+      "p11": 90
+    },
+    "atoms": {
+      "p00": 0.1,
+      "p01": 0,
+      "p10": 0,
+      "p11": 0.9
+    },
+    "marginalA": 0.9,
+    "marginalB": 0.9,
+    "composedOrBlockRate": 0.9,
+    "composedOrPassRate": 0.1,
+    "fhLowerOr": 0.9,
+    "fhUpperOr": 1,
+    "fhWidthOr": 0.1,
+    "overlap": 0.9,
+    "lambda": 1,
+    "tightness": 0,
+    "invariantSatisfied": true
+  },
+  "witnesses": [
+    {
+      "id": "harmful-or-lower-bound-max-block-overlap-v0",
+      "kind": "lower-bound",
+      "label": "harmful",
+      "atomCounts": {
+        "p00": 10,
+        "p01": 0,
+        "p10": 0,
+        "p11": 90
+      },
+      "atoms": {
+        "p00": 0.1,
+        "p01": 0,
+        "p10": 0,
+        "p11": 0.9
+      },
+      "composedOrBlockRate": 0.9,
+      "composedOrPassRate": 0.1,
+      "description": "Lower safety endpoint for harmful examples: guardrail blocks overlap as much as the marginals permit, leaving the largest shared miss set."
+    },
+    {
+      "id": "harmful-or-upper-bound-min-block-overlap-v0",
+      "kind": "upper-bound",
+      "label": "harmful",
+      "atomCounts": {
+        "p00": 0,
+        "p01": 10,
+        "p10": 10,
+        "p11": 80
+      },
+      "atoms": {
+        "p00": 0,
+        "p01": 0.1,
+        "p10": 0.1,
+        "p11": 0.8
+      },
+      "composedOrBlockRate": 1,
+      "composedOrPassRate": 0,
+      "description": "Upper safety endpoint for harmful examples: guardrail misses are separated as much as the marginals permit, minimizing shared misses."
+    }
+  ],
+  "boundedClaim": {
+    "metric": "P(A OR B blocks | Y=harmful)",
+    "lower": 0.9,
+    "upper": 1,
+    "unit": "rate",
+    "statement": "Given the stated sample and OR rule, the harmful-example block rate is bounded in [90%, 100%]; the corresponding pass-through risk is bounded in [0%, 10%]."
+  }
+}

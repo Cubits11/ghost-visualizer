@@ -1,29 +1,26 @@
 import { WitnessCard } from "../components/WitnessCard";
-import {
-  lowerSafetyWitness,
-  toyExample,
-  upperSafetyWitness,
-} from "../data/mathExamples";
+import { sampleReceipt } from "../evidence/sampleReceipt";
+
+const lowerWitness = sampleReceipt.witnesses.find((witness) => witness.kind === "lower-bound");
+const upperWitness = sampleReceipt.witnesses.find((witness) => witness.kind === "upper-bound");
 
 export function EndpointWitnesses() {
+  if (!lowerWitness || !upperWitness) {
+    return null;
+  }
+
   return (
     <div className="scene-layout endpoint-witnesses-layout">
       <div className="witness-grid">
         <WitnessCard
           title="Lower-bound safety witness"
-          subtitle="shared blind spot endpoint"
-          atoms={lowerSafetyWitness}
-          overlapFailures={toyExample.maxOverlap}
-          safety={90}
-          risk={10}
+          subtitle="shared miss endpoint"
+          witness={lowerWitness}
         />
         <WitnessCard
           title="Upper-bound safety witness"
-          subtitle="separated failure endpoint"
-          atoms={upperSafetyWitness}
-          overlapFailures={toyExample.minOverlap}
-          safety={100}
-          risk={0}
+          subtitle="separated miss endpoint"
+          witness={upperWitness}
         />
       </div>
     </div>

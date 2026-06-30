@@ -1,10 +1,11 @@
 import { motion, useReducedMotion } from "motion/react";
 import { IntervalBand } from "./IntervalBand";
+import { boundedClaim, toyExample } from "../data/mathExamples";
 
 const inputs = [
   {
     label: "marginals",
-    detail: "P(A fail) = 10%, P(B fail) = 10%",
+    detail: `P(A miss) = ${toyExample.guardrailAFailures}%, P(B miss) = ${toyExample.guardrailBFailures}%`,
   },
   {
     label: "composition rule",
@@ -150,7 +151,7 @@ export function ConstraintMachine() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: reducedMotion ? 0 : 4.62, duration: reducedMotion ? 0 : 0.36 }}
           >
-            90%
+            {boundedClaim.safetyLower}%
           </motion.div>
           <motion.div
             className="endpoint-lock endpoint-lock-upper"
@@ -158,14 +159,14 @@ export function ConstraintMachine() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: reducedMotion ? 0 : 4.8, duration: reducedMotion ? 0 : 0.36 }}
           >
-            100%
+            {boundedClaim.safetyUpper}%
           </motion.div>
         </div>
         <div className="machine-rails">
           <span>{"p >= 0"}</span>
           <span>sum p = 1</span>
-          <span>P(A fail) = 10%</span>
-          <span>P(B fail) = 10%</span>
+          <span>P(A miss) = {toyExample.guardrailAFailures}%</span>
+          <span>P(B miss) = {toyExample.guardrailBFailures}%</span>
         </div>
         <p className="machine-caption">Bounding every world still compatible with the evidence.</p>
       </motion.div>
@@ -176,7 +177,12 @@ export function ConstraintMachine() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: reducedMotion ? 0 : 4.88, duration: reducedMotion ? 0 : 0.56 }}
       >
-        <IntervalBand lower={90} upper={100} point={99} label="composed safety" />
+        <IntervalBand
+          lower={boundedClaim.safetyLower}
+          upper={boundedClaim.safetyUpper}
+          point={100 - toyExample.independenceOverlap}
+          label="composed safety"
+        />
         <div className="bound-tags">
           {["lower witness exists", "upper witness exists"].map((tag, index) => (
             <motion.span

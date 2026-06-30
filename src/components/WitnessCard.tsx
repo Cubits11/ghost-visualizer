@@ -1,24 +1,22 @@
-import { AtomCounts } from "../data/mathExamples";
+import type { EndpointWitness } from "../math/guardrailComposition";
 import { AtomTable } from "./AtomTable";
 import { DotWorld } from "./DotWorld";
 
 interface WitnessCardProps {
   title: string;
   subtitle: string;
-  atoms: AtomCounts;
-  overlapFailures: number;
-  safety: number;
-  risk: number;
+  witness: EndpointWitness;
 }
 
-export function WitnessCard({
-  title,
-  subtitle,
-  atoms,
-  overlapFailures,
-  safety,
-  risk,
-}: WitnessCardProps) {
+function percent(value: number) {
+  return `${Math.round(value * 100)}%`;
+}
+
+export function WitnessCard({ title, subtitle, witness }: WitnessCardProps) {
+  const overlapFailures = Math.round(witness.atomCounts.p00);
+  const total =
+    witness.atomCounts.p00 + witness.atomCounts.p01 + witness.atomCounts.p10 + witness.atomCounts.p11;
+
   return (
     <article className="witness-card">
       <header>
@@ -37,12 +35,12 @@ export function WitnessCard({
           compact
           showStats={false}
         />
-        <AtomTable atoms={atoms} compact />
+        <AtomTable counts={witness.atomCounts} total={total} compact />
       </div>
 
       <footer>
-        <span>safety {safety}%</span>
-        <span>risk {risk}%</span>
+        <span>safety {percent(witness.composedOrBlockRate)}</span>
+        <span>risk {percent(witness.composedOrPassRate)}</span>
         <span>constraints satisfied</span>
       </footer>
     </article>

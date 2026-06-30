@@ -1,7 +1,7 @@
 import { CSSProperties, KeyboardEvent, PointerEvent } from "react";
 import { DotWorld } from "../components/DotWorld";
 import { IntervalBand } from "../components/IntervalBand";
-import { composedRisk, composedSafety, toyExample } from "../data/mathExamples";
+import { boundedClaim, composedRisk, composedSafety, toyExample } from "../data/mathExamples";
 
 interface SameScoresDifferentWorldsProps {
   overlapFailures: number;
@@ -108,7 +108,12 @@ export function SameScoresDifferentWorlds({
           <span className="overlap-slider-fill" />
           <span className="overlap-slider-thumb" />
         </div>
-        <IntervalBand lower={90} upper={100} point={safety} label="permitted composed safety" />
+        <IntervalBand
+          lower={boundedClaim.safetyLower}
+          upper={boundedClaim.safetyUpper}
+          point={safety}
+          label="permitted composed safety"
+        />
       </div>
     </div>
   );

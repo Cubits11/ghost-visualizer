@@ -1,36 +1,57 @@
-import { AtomCounts, atomPercent } from "../data/mathExamples";
+import type { AtomKey } from "../math/guardrailComposition";
+import { atomPercent } from "../data/mathExamples";
 
 interface AtomTableProps {
-  atoms: AtomCounts;
+  counts: Record<AtomKey, number>;
+  total: number;
   title?: string;
   compact?: boolean;
 }
 
-export function AtomTable({ atoms, title, compact = false }: AtomTableProps) {
+const cells: Array<{
+  key: AtomKey;
+  className: string;
+  label: string;
+  symbol: string;
+}> = [
+  {
+    key: "p00",
+    className: "atom-neither",
+    label: "neither blocks",
+    symbol: "p00",
+  },
+  {
+    key: "p01",
+    className: "atom-b",
+    label: "B only blocks",
+    symbol: "p01",
+  },
+  {
+    key: "p10",
+    className: "atom-a",
+    label: "A only blocks",
+    symbol: "p10",
+  },
+  {
+    key: "p11",
+    className: "atom-both",
+    label: "both block",
+    symbol: "p11",
+  },
+];
+
+export function AtomTable({ counts, total, title, compact = false }: AtomTableProps) {
   return (
     <div className={`atom-table${compact ? " is-compact" : ""}`}>
       {title ? <h4>{title}</h4> : null}
-      <div className="atom-grid" role="table" aria-label={title ?? "Atom table"}>
-        <div className="atom-cell atom-neither" role="cell">
-          <span>neither fails</span>
-          <strong>p00</strong>
-          <em>{atomPercent(atoms.neither)}</em>
-        </div>
-        <div className="atom-cell atom-b" role="cell">
-          <span>B only</span>
-          <strong>p01</strong>
-          <em>{atomPercent(atoms.bOnly)}</em>
-        </div>
-        <div className="atom-cell atom-a" role="cell">
-          <span>A only</span>
-          <strong>p10</strong>
-          <em>{atomPercent(atoms.aOnly)}</em>
-        </div>
-        <div className="atom-cell atom-both" role="cell">
-          <span>both fail</span>
-          <strong>p11</strong>
-          <em>{atomPercent(atoms.both)}</em>
-        </div>
+      <div className="atom-grid" role="table" aria-label={title ?? "Block atom table"}>
+        {cells.map((cell) => (
+          <div key={cell.key} className={`atom-cell ${cell.className}`} role="cell">
+            <span>{cell.label}</span>
+            <strong>{cell.symbol}</strong>
+            <em>{atomPercent(counts[cell.key], total)}</em>
+          </div>
+        ))}
       </div>
     </div>
   );

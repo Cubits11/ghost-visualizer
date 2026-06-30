@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { ScoreCard } from "../components/ScoreCard";
+import { independenceBaselineSafety, toyExample } from "../data/mathExamples";
 
 export function ColdOpen() {
   return (
@@ -20,11 +21,21 @@ export function ColdOpen() {
       </div>
 
       <div className="score-stack">
-        <ScoreCard label="Guardrail A" value="90%" caption="individual score" delay={0.1} />
-        <ScoreCard label="Guardrail B" value="90%" caption="individual score" delay={0.22} />
+        <ScoreCard
+          label="Guardrail A"
+          value={`${toyExample.guardrailACatches}%`}
+          caption="individual score"
+          delay={0.1}
+        />
+        <ScoreCard
+          label="Guardrail B"
+          value={`${toyExample.guardrailBCatches}%`}
+          caption="individual score"
+          delay={0.22}
+        />
         <ScoreCard
           label="Combined"
-          value="99%"
+          value={`${independenceBaselineSafety}%`}
           caption="independence baseline"
           tone="evidence"
           delay={0.36}

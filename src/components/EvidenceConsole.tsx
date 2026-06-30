@@ -1,21 +1,26 @@
 import { useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { boundedClaim } from "../data/mathExamples";
+import { sampleReceipt } from "../evidence/sampleReceipt";
 
 const rejectedClaims = ["safe", "guaranteed", "deployment proof", "universal truth"];
 
 export function EvidenceConsole() {
   const reducedMotion = useReducedMotion();
   const timestamp = useMemo(() => new Date().toISOString(), []);
+  const witnessIds = sampleReceipt.witnesses.map((witness) => witness.id).join(" / ");
   const lines = [
-    ["assumptions", "marginals + composition rule + declared constraints"],
-    ["interval", `safety [${boundedClaim.safetyLower}%, ${boundedClaim.safetyUpper}%] / risk [${boundedClaim.riskLower}%, ${boundedClaim.riskUpper}%]`],
-    ["witnesses", `${boundedClaim.witnessLowerHash} / ${boundedClaim.witnessUpperHash}`],
-    ["non-claims", "not a certificate; not deployment proof; not universal truth"],
-    ["hashes", `${boundedClaim.policyHash} / ${boundedClaim.datasetHash}`],
+    ["assumptions", `${sampleReceipt.assumptions.length} stated assumptions`],
+    [
+      "interval",
+      `safety [${boundedClaim.safetyLower}%, ${boundedClaim.safetyUpper}%] / risk [${boundedClaim.riskLower}%, ${boundedClaim.riskUpper}%]`,
+    ],
+    ["witnesses", witnessIds],
+    ["non-claims", `${sampleReceipt.nonClaims.length} explicit non-claims`],
+    ["demo ids", `${sampleReceipt.policyId} / ${sampleReceipt.datasetId}`],
     ["timestamp", timestamp],
   ];
-  const claim = `composed safety lies in [${boundedClaim.safetyLower}%, ${boundedClaim.safetyUpper}%] under stated assumptions`;
+  const claim = sampleReceipt.boundedClaim.statement;
 
   return (
     <div className="receipt-theater">

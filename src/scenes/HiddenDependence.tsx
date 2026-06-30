@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { DotWorld } from "../components/DotWorld";
 import { ScoreCard } from "../components/ScoreCard";
+import { toyExample } from "../data/mathExamples";
 
 export function HiddenDependence() {
   return (
@@ -9,7 +10,7 @@ export function HiddenDependence() {
         <DotWorld
           title="shared failure layer"
           subtitle="hidden behind the polished cards"
-          overlapFailures={10}
+          overlapFailures={toyExample.maxOverlap}
           variant="shared"
           compact
           showStats={false}
@@ -22,8 +23,18 @@ export function HiddenDependence() {
         animate={{ opacity: 0.82, y: -4 }}
         transition={{ delay: 0.35, duration: 0.7 }}
       >
-        <ScoreCard label="Guardrail A" value="90%" caption="visible marginal" delay={0} />
-        <ScoreCard label="Guardrail B" value="90%" caption="visible marginal" delay={0.08} />
+        <ScoreCard
+          label="Guardrail A"
+          value={`${toyExample.guardrailACatches}%`}
+          caption="visible marginal"
+          delay={0}
+        />
+        <ScoreCard
+          label="Guardrail B"
+          value={`${toyExample.guardrailBCatches}%`}
+          caption="visible marginal"
+          delay={0.08}
+        />
       </motion.div>
 
       <motion.div

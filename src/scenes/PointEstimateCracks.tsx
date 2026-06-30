@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { IntervalBand } from "../components/IntervalBand";
-import { boundedClaim } from "../data/mathExamples";
+import { boundedClaim, independenceBaselineSafety } from "../data/mathExamples";
 
 const fractures = [
   "M178 38 L162 106 L184 151 L171 214 L196 304",
@@ -42,7 +42,7 @@ export function PointEstimateCracks() {
             }}
           >
             <span>point estimate</span>
-            <strong>99%</strong>
+            <strong>{independenceBaselineSafety}%</strong>
           </motion.div>
 
           <motion.div
@@ -61,7 +61,7 @@ export function PointEstimateCracks() {
             }}
           >
             <span>point estimate</span>
-            <strong>99%</strong>
+            <strong>{independenceBaselineSafety}%</strong>
           </motion.div>
           <motion.div
             className="point-estimate estimate-shard estimate-shard-right"
@@ -79,7 +79,7 @@ export function PointEstimateCracks() {
             }}
           >
             <span>point estimate</span>
-            <strong>99%</strong>
+            <strong>{independenceBaselineSafety}%</strong>
           </motion.div>
 
           <svg className="fracture-map" viewBox="0 0 360 360" aria-hidden="true">
