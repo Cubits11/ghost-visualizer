@@ -65,7 +65,11 @@ export function DotWorld({
   const offset = 19;
 
   return (
-    <article className={`dot-world${compact ? " is-compact" : ""}`}>
+    <article
+      className={`dot-world${compact ? " is-compact" : ""}`}
+      data-variant={variant}
+      data-shared-miss={atoms.both}
+    >
       <header>
         <div>
           <h3>{title}</h3>
@@ -73,7 +77,7 @@ export function DotWorld({
         </div>
         {showStats ? (
           <div className="risk-chip">
-            <span>co-fail</span>
+            <span>shared miss</span>
             <strong>{atomPercent(atoms.both)}</strong>
           </div>
         ) : null}
@@ -112,10 +116,10 @@ export function DotWorld({
 
       {showStats ? (
         <footer>
-          <span>A fails 10%</span>
-          <span>B fails 10%</span>
-          <span>risk {composedRisk(overlapFailures)}%</span>
-          <span>safety {composedSafety(overlapFailures)}%</span>
+          <span>A misses 10</span>
+          <span>B misses 10</span>
+          <span>shared miss {composedRisk(overlapFailures)}%</span>
+          <span>OR safety {composedSafety(overlapFailures)}%</span>
         </footer>
       ) : null}
     </article>

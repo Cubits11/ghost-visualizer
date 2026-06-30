@@ -50,7 +50,12 @@ export default function App() {
   }, []);
 
   const initialOverlap = useMemo(() => {
-    const overlap = Number(getSearchParams().get("overlap"));
+    const overlapParam = getSearchParams().get("overlap");
+    if (overlapParam === null) {
+      return toyExample.maxOverlap;
+    }
+
+    const overlap = Number(overlapParam);
     return Number.isFinite(overlap) ? clampOverlap(overlap) : toyExample.maxOverlap;
   }, []);
 

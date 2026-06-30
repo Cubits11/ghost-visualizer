@@ -8,8 +8,8 @@ export function HiddenDependence() {
     <div className="scene-layout hidden-dependence-layout">
       <div className="dependence-backdrop" aria-hidden="true">
         <DotWorld
-          title="shared failure layer"
-          subtitle="hidden behind the polished cards"
+          title="shared miss layer"
+          subtitle="the hidden variable is overlap"
           overlapFailures={toyExample.maxOverlap}
           variant="shared"
           compact
@@ -43,7 +43,7 @@ export function HiddenDependence() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.62 }}
       >
-        <span>Do they fail together?</span>
+        <span>Hidden variable: overlap</span>
       </motion.div>
     </div>
   );

@@ -1,5 +1,5 @@
-import { useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
+import { EvidenceArtifactStack } from "./EvidenceArtifactStack";
 import { boundedClaim } from "../data/mathExamples";
 import { sampleReceipt } from "../evidence/sampleReceipt";
 
@@ -7,18 +7,16 @@ const rejectedClaims = ["safe", "guaranteed", "deployment proof", "universal tru
 
 export function EvidenceConsole() {
   const reducedMotion = useReducedMotion();
-  const timestamp = useMemo(() => new Date().toISOString(), []);
-  const witnessIds = sampleReceipt.witnesses.map((witness) => witness.id).join(" / ");
   const lines = [
     ["assumptions", `${sampleReceipt.assumptions.length} stated assumptions`],
     [
       "interval",
       `safety [${boundedClaim.safetyLower}%, ${boundedClaim.safetyUpper}%] / risk [${boundedClaim.riskLower}%, ${boundedClaim.riskUpper}%]`,
     ],
-    ["witnesses", witnessIds],
+    ["witnesses", `${sampleReceipt.witnesses.length} endpoint witnesses attached`],
     ["non-claims", `${sampleReceipt.nonClaims.length} explicit non-claims`],
-    ["demo ids", `${sampleReceipt.policyId} / ${sampleReceipt.datasetId}`],
-    ["timestamp", timestamp],
+    ["scope", "policy + dataset pinned in config.yaml"],
+    ["timestamp", sampleReceipt.generatedAt],
   ];
   const claim = sampleReceipt.boundedClaim.statement;
 
@@ -81,22 +79,25 @@ export function EvidenceConsole() {
           >
             {claim}
           </motion.p>
-          <div className="console-lines">
-            {lines.map(([key, value], index) => (
-              <motion.div
-                key={key}
-                className="console-line"
-                initial={reducedMotion ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: reducedMotion ? 0 : 1.18 + index * 0.17,
-                  duration: reducedMotion ? 0 : 0.34,
-                }}
-              >
-                <span>{key}</span>
-                <strong>{value}</strong>
-              </motion.div>
-            ))}
+          <div className="receipt-grid">
+            <div className="console-lines">
+              {lines.map(([key, value], index) => (
+                <motion.div
+                  key={key}
+                  className="console-line"
+                  initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: reducedMotion ? 0 : 1.18 + index * 0.17,
+                    duration: reducedMotion ? 0 : 0.34,
+                  }}
+                >
+                  <span>{key}</span>
+                  <strong>{value}</strong>
+                </motion.div>
+              ))}
+            </div>
+            <EvidenceArtifactStack />
           </div>
           <motion.p
             className="final-line"

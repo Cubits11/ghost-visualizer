@@ -180,8 +180,8 @@ export function ConstraintMachine() {
         <IntervalBand
           lower={boundedClaim.safetyLower}
           upper={boundedClaim.safetyUpper}
-          point={100 - toyExample.independenceOverlap}
           label="composed safety"
+          caption="The solver returns a bound, not a point, until overlap is specified."
         />
         <div className="bound-tags">
           {["lower witness exists", "upper witness exists"].map((tag, index) => (

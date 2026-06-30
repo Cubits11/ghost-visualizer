@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { IntervalBand } from "../components/IntervalBand";
-import { boundedClaim, independenceBaselineSafety } from "../data/mathExamples";
+import { boundedClaim, toyExample } from "../data/mathExamples";
 
 const fractures = [
   "M178 38 L162 106 L184 151 L171 214 L196 304",
@@ -42,7 +42,7 @@ export function PointEstimateCracks() {
             }}
           >
             <span>point estimate</span>
-            <strong>{independenceBaselineSafety}%</strong>
+            <strong>{toyExample.guardrailACatches}%</strong>
           </motion.div>
 
           <motion.div
@@ -61,7 +61,7 @@ export function PointEstimateCracks() {
             }}
           >
             <span>point estimate</span>
-            <strong>{independenceBaselineSafety}%</strong>
+            <strong>{toyExample.guardrailACatches}%</strong>
           </motion.div>
           <motion.div
             className="point-estimate estimate-shard estimate-shard-right"
@@ -79,7 +79,7 @@ export function PointEstimateCracks() {
             }}
           >
             <span>point estimate</span>
-            <strong>{independenceBaselineSafety}%</strong>
+            <strong>{toyExample.guardrailACatches}%</strong>
           </motion.div>
 
           <svg className="fracture-map" viewBox="0 0 360 360" aria-hidden="true">
@@ -131,8 +131,9 @@ export function PointEstimateCracks() {
           lower={boundedClaim.safetyLower}
           upper={boundedClaim.safetyUpper}
           label="honest composed safety interval"
+          caption="Boundary comes from the Fréchet-Hoeffding OR constraints; no independence assumption is inserted."
         />
-        <p>An interval says what the evidence permits.</p>
+        <p>Same visible score. Multiple admissible joint worlds.</p>
       </motion.div>
     </div>
   );

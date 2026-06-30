@@ -72,14 +72,14 @@ export function SameScoresDifferentWorlds({
     <div className="scene-layout same-worlds-layout">
       <div className="world-panels">
         <DotWorld
-          title="World 1"
-          subtitle="failures separated"
+          title="World A"
+          subtitle="complementary misses: A catches what B misses"
           overlapFailures={toyExample.minOverlap}
           variant="separated"
         />
         <DotWorld
-          title="World 2"
-          subtitle="shared blind spot"
+          title="World B"
+          subtitle="aligned misses: both miss the same harmful prompts"
           overlapFailures={overlapFailures}
           variant="shared"
         />
@@ -87,7 +87,7 @@ export function SameScoresDifferentWorlds({
 
       <div className="overlap-control">
         <div className="control-readout">
-          <span>failure overlap</span>
+          <span>shared miss overlap</span>
           <strong>{overlapFailures}%</strong>
           <em>composed risk {risk}% / composed safety {safety}%</em>
         </div>
@@ -95,11 +95,11 @@ export function SameScoresDifferentWorlds({
           className="overlap-slider"
           role="slider"
           tabIndex={0}
-          aria-label="Failure overlap"
+          aria-label="Shared miss overlap"
           aria-valuemin={toyExample.minOverlap}
           aria-valuemax={toyExample.maxOverlap}
           aria-valuenow={overlapFailures}
-          aria-valuetext={`${overlapFailures}% shared failure overlap`}
+          aria-valuetext={`${overlapFailures}% shared miss overlap`}
           style={{ "--slider-pos": `${sliderPosition}%` } as CSSProperties}
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
@@ -113,6 +113,9 @@ export function SameScoresDifferentWorlds({
           upper={boundedClaim.safetyUpper}
           point={safety}
           label="permitted composed safety"
+          lowerLabel="aligned misses"
+          upperLabel="complementary misses"
+          caption="Moving only the overlap changes composed risk; the 90% marginals stay fixed."
         />
       </div>
     </div>

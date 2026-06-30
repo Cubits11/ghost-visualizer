@@ -47,6 +47,8 @@ describe("guardrail OR composition", () => {
     expect(result.fhLowerOr).toBeCloseTo(0.9);
     expect(result.fhUpperOr).toBeCloseTo(1);
     expect(result.composedOrPassRate).toBeCloseTo(0.1);
+    expect(result.sharedMissRate).toBeCloseTo(0.1);
+    expect(result.blockOverlap).toBeCloseTo(0.9);
     expect(result.invariantSatisfied).toBe(true);
   });
 
@@ -65,6 +67,8 @@ describe("guardrail OR composition", () => {
     expect(result.fhLowerOr).toBeCloseTo(0.9);
     expect(result.fhUpperOr).toBeCloseTo(1);
     expect(result.composedOrPassRate).toBeCloseTo(0);
+    expect(result.sharedMissRate).toBeCloseTo(0);
+    expect(result.blockOverlap).toBeCloseTo(0.8);
     expect(result.invariantSatisfied).toBe(true);
   });
 

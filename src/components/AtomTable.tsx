@@ -16,8 +16,8 @@ const cells: Array<{
 }> = [
   {
     key: "p00",
-    className: "atom-neither",
-    label: "neither blocks",
+    className: "atom-shared-miss",
+    label: "shared miss",
     symbol: "p00",
   },
   {
@@ -34,7 +34,7 @@ const cells: Array<{
   },
   {
     key: "p11",
-    className: "atom-both",
+    className: "atom-both-block",
     label: "both block",
     symbol: "p11",
   },

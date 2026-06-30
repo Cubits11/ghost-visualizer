@@ -32,7 +32,8 @@ export type ClasswiseCompositionResult = {
   fhLowerOr: number;
   fhUpperOr: number;
   fhWidthOr: number;
-  overlap: number;
+  blockOverlap: number;
+  sharedMissRate: number;
   lambda?: number;
   tightness?: number;
   invariantSatisfied: boolean;
@@ -211,7 +212,8 @@ export function computeClasswiseOrResult(
     fhLowerOr: bounds.lower,
     fhUpperOr: bounds.upper,
     fhWidthOr: bounds.width,
-    overlap: atoms.p11,
+    blockOverlap: atoms.p11,
+    sharedMissRate: atoms.p00,
     lambda: dependence.lambda,
     tightness: dependence.tightness,
     invariantSatisfied,
@@ -247,7 +249,7 @@ export function buildEndpointWitnessesForHarmfulOr(params: {
 
   return [
     {
-      id: "harmful-or-lower-bound-max-block-overlap-v0",
+      id: "harmful-or-lower-bound-max-shared-miss-v0",
       kind: "lower-bound",
       label: "harmful",
       atomCounts: lowerCounts,
@@ -258,7 +260,7 @@ export function buildEndpointWitnessesForHarmfulOr(params: {
         "Lower safety endpoint for harmful examples: guardrail blocks overlap as much as the marginals permit, leaving the largest shared miss set.",
     },
     {
-      id: "harmful-or-upper-bound-min-block-overlap-v0",
+      id: "harmful-or-upper-bound-min-shared-miss-v0",
       kind: "upper-bound",
       label: "harmful",
       atomCounts: upperCounts,
@@ -300,6 +302,7 @@ export function buildEvidenceReceipt(rows: EvaluationRow[]): EvidenceReceipt {
       "This does not prove the model is safe.",
       "This does not assume guardrail independence.",
       "This does not generalize beyond the stated dataset and assumptions.",
+      "This does not provide cryptographic provenance.",
     ],
     harmful,
     witnesses,

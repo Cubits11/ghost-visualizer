@@ -7,9 +7,22 @@ interface IntervalBandProps {
   label: string;
   unit?: string;
   tone?: "truth" | "risk";
+  lowerLabel?: string;
+  upperLabel?: string;
+  caption?: string;
 }
 
-export function IntervalBand({ lower, upper, point, label, unit = "%", tone = "truth" }: IntervalBandProps) {
+export function IntervalBand({
+  lower,
+  upper,
+  point,
+  label,
+  unit = "%",
+  tone = "truth",
+  lowerLabel = "lower witness",
+  upperLabel = "upper witness",
+  caption,
+}: IntervalBandProps) {
   const span = Math.max(1, upper - lower);
   const pointPosition = point === undefined ? undefined : ((point - lower) / span) * 100;
 
@@ -24,6 +37,8 @@ export function IntervalBand({ lower, upper, point, label, unit = "%", tone = "t
         </strong>
       </div>
       <div className="interval-track">
+        <span className="interval-endpoint interval-endpoint-lower" />
+        <span className="interval-endpoint interval-endpoint-upper" />
         <motion.div
           className="interval-fill"
           initial={{ scaleX: 0 }}
@@ -42,6 +57,11 @@ export function IntervalBand({ lower, upper, point, label, unit = "%", tone = "t
           </motion.div>
         ) : null}
       </div>
+      <div className="interval-labels" aria-hidden="true">
+        <span>{lowerLabel}</span>
+        <span>{upperLabel}</span>
+      </div>
+      {caption ? <p className="interval-caption">{caption}</p> : null}
     </div>
   );
 }

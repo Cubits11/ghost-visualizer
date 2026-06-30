@@ -16,7 +16,8 @@
     "This is not a deployment certificate.",
     "This does not prove the model is safe.",
     "This does not assume guardrail independence.",
-    "This does not generalize beyond the stated dataset and assumptions."
+    "This does not generalize beyond the stated dataset and assumptions.",
+    "This does not provide cryptographic provenance."
   ],
   "harmful": {
     "label": "harmful",
@@ -40,14 +41,15 @@
     "fhLowerOr": 0.9,
     "fhUpperOr": 1,
     "fhWidthOr": 0.1,
-    "overlap": 0.9,
+    "blockOverlap": 0.9,
+    "sharedMissRate": 0.1,
     "lambda": 1,
     "tightness": 0,
     "invariantSatisfied": true
   },
   "witnesses": [
     {
-      "id": "harmful-or-lower-bound-max-block-overlap-v0",
+      "id": "harmful-or-lower-bound-max-shared-miss-v0",
       "kind": "lower-bound",
       "label": "harmful",
       "atomCounts": {
@@ -67,7 +69,7 @@
       "description": "Lower safety endpoint for harmful examples: guardrail blocks overlap as much as the marginals permit, leaving the largest shared miss set."
     },
     {
-      "id": "harmful-or-upper-bound-min-block-overlap-v0",
+      "id": "harmful-or-upper-bound-min-shared-miss-v0",
       "kind": "upper-bound",
       "label": "harmful",
       "atomCounts": {

@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { ScoreCard } from "../components/ScoreCard";
-import { independenceBaselineSafety, toyExample } from "../data/mathExamples";
+import { toyExample } from "../data/mathExamples";
 
 export function ColdOpen() {
   return (
@@ -20,26 +20,26 @@ export function ColdOpen() {
         />
       </div>
 
-      <div className="score-stack">
+      <div className="false-certainty">
         <ScoreCard
-          label="Guardrail A"
+          label="Published safety score"
           value={`${toyExample.guardrailACatches}%`}
-          caption="individual score"
-          delay={0.1}
-        />
-        <ScoreCard
-          label="Guardrail B"
-          value={`${toyExample.guardrailBCatches}%`}
-          caption="individual score"
-          delay={0.22}
-        />
-        <ScoreCard
-          label="Combined"
-          value={`${independenceBaselineSafety}%`}
-          caption="independence baseline"
+          caption="100 harmful prompts, one official-looking marginal"
           tone="evidence"
-          delay={0.36}
+          delay={0.08}
         />
+        <div className="marginal-pair" aria-label="Visible guardrail marginals">
+          <span>Guardrail A: {toyExample.guardrailACatches}%</span>
+          <span>Guardrail B: {toyExample.guardrailBCatches}%</span>
+        </div>
+        <motion.p
+          className="therefore-safe"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.92, duration: 0.5 }}
+        >
+          Therefore: safe?
+        </motion.p>
       </div>
 
       <motion.div
@@ -48,7 +48,7 @@ export function ColdOpen() {
         animate={{ opacity: 1 }}
         transition={{ delay: 1.05, duration: 0.8 }}
       >
-        <span>A score can feel like truth.</span>
+        <span>A single number can look finished before the evidence is finished.</span>
       </motion.div>
     </div>
   );

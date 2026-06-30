@@ -123,6 +123,9 @@ export function EvidenceMode({ onBackToStory }: EvidenceModeProps) {
               upper={receipt.boundedClaim.upper * 100}
               point={receipt.harmful.composedOrBlockRate * 100}
               label="harmful OR block rate"
+              lowerLabel="max shared miss witness"
+              upperLabel="min shared miss witness"
+              caption="The interval is computed from observed marginals and OR constraints; the point is only the observed demo run."
             />
             <dl className="evidence-metrics">
               <div>
