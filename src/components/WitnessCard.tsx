@@ -24,7 +24,7 @@ export function WitnessCard({ title, subtitle, witness }: WitnessCardProps) {
           <p className="scene-kicker">{subtitle}</p>
           <h3>{title}</h3>
         </div>
-        <span className="stamp">verified</span>
+        <span className="stamp">constraints held</span>
       </header>
 
       <div className="witness-body">
