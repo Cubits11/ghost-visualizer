@@ -1,4 +1,10 @@
-import { AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig } from "remotion";
+import {
+  AbsoluteFill,
+  Easing,
+  interpolate,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
 import { boundedClaim, toyExample } from "../data/mathExamples";
 import {
   artifactImpact,
@@ -22,9 +28,16 @@ import {
 } from "./primitives";
 import { cue, hold, seconds } from "./timeline";
 
-function layerOpacity(frame: number, startSec: number, endSec: number, fps: number, fadeSec = 0.7) {
+function layerOpacity(
+  frame: number,
+  startSec: number,
+  endSec: number,
+  fps: number,
+  fadeSec = 0.7,
+) {
   const enter = cue(frame, startSec, fadeSec, fps, officialEnter);
-  const exit = 1 - cue(frame, endSec - fadeSec, fadeSec, fps, Easing.in(Easing.cubic));
+  const exit =
+    1 - cue(frame, endSec - fadeSec, fadeSec, fps, Easing.in(Easing.cubic));
   return Math.min(enter, exit);
 }
 
@@ -67,14 +80,20 @@ export function ShatteringPointEstimateScene() {
   const hiddenOpacity = layerOpacity(frame, 13.8, 24, fps, 0.7);
   const worldsOpacity = layerOpacity(frame, 20, 38, fps, 0.9);
   const intervalOpacity = layerOpacity(frame, 34, 52, fps, 0.9);
-  const receiptOpacity = layerOpacity(frame, 48, 62, fps, 0.7);
+  const receiptOpacity = layerOpacity(frame, 48, 60.6, fps, 0.7);
+  const finalBoundaryOpacity = layerOpacity(frame, 57.7, 60.6, fps, 0.55);
 
   const blackField = cue(frame, 0, 1.4, fps, officialEnter);
   const officialScore = cue(frame, 2.6, 1.4, fps, officialEnter);
   const guardrailEnter = cue(frame, 6, 1.4, fps, officialEnter);
   const therefore = cue(frame, 9, 1.0, fps, officialEnter);
   const pausePressure = hold(frame, 12, 15, fps)
-    ? clampedInterpolate(frame, [seconds(12, fps), seconds(15, fps)], [0, 1], Easing.linear)
+    ? clampedInterpolate(
+        frame,
+        [seconds(12, fps), seconds(15, fps)],
+        [0, 1],
+        Easing.linear,
+      )
     : frame > seconds(15, fps)
       ? 1
       : 0;
@@ -103,7 +122,10 @@ export function ShatteringPointEstimateScene() {
           <span>VIS-001</span>
           <strong>The Shattering Point Estimate</strong>
         </div>
-        <div className="official-score-wrap" style={{ transform: `scale(${scoreScale})` }}>
+        <div
+          className="official-score-wrap"
+          style={{ transform: `scale(${scoreScale})` }}
+        >
           <ScoreObject
             label="Published safety score"
             value={`${toyExample.guardrailACatches}%`}
@@ -150,15 +172,21 @@ export function ShatteringPointEstimateScene() {
           }}
         >
           <span>Hidden variable</span>
-          <strong>shared miss overlap</strong>
-          <p>
-            p00 is the shared miss: neither guardrail blocks. p11 is both-block overlap.
-          </p>
+          <strong>where the misses overlap</strong>
+          <p>Two guardrails can miss different prompts — or the same ones.</p>
           <div className="atom-callout-grid">
-            <span className="atom-callout is-danger">p00 shared miss</span>
-            <span>p01 B only blocks</span>
-            <span>p10 A only blocks</span>
-            <span>p11 both block</span>
+            <span className="atom-callout is-danger">
+              Shared Miss <em>p00 · neither guardrail catches it</em>
+            </span>
+            <span>
+              A Only <em>p10</em>
+            </span>
+            <span>
+              B Only <em>p01</em>
+            </span>
+            <span>
+              Both Block <em>p11 · confirmed block overlap</em>
+            </span>
           </div>
         </div>
         <div className="crack-title" style={{ opacity: crack }}>
@@ -166,15 +194,20 @@ export function ShatteringPointEstimateScene() {
         </div>
       </FrameLayer>
 
-      <FrameLayer opacity={Math.max(falseCertaintyOpacity, hiddenOpacity)} className="crack-layer">
+      <FrameLayer
+        opacity={Math.max(falseCertaintyOpacity, hiddenOpacity)}
+        className="crack-layer"
+      >
         <CrackOverlay progress={crack} />
       </FrameLayer>
 
       <FrameLayer opacity={worldsOpacity} className="worlds-render">
         <div className="section-copy">
-          <span>Same scores, different worlds</span>
-          <strong>The missing overlap is not zero.</strong>
-          <p>When overlap is missing, VIS-001 defaults the risk view to aligned shared misses.</p>
+          <span>Same scores. Different miss overlap. Different risk.</span>
+          <strong>
+            If overlap is unreported, both worlds remain possible.
+          </strong>
+          <p>The honest claim must keep the aligned-miss world possible.</p>
         </div>
         <div className="world-panels-render">
           <DotGrid100
@@ -186,29 +219,32 @@ export function ShatteringPointEstimateScene() {
           />
           <DotGrid100
             title="World B"
-            subtitle="aligned shared misses"
+            subtitle="aligned misses"
             overlapFailures={toyExample.maxOverlap}
             variant="shared"
             revealProgress={Math.max(0, worldReveal - 0.08) / 0.92}
           />
+        </div>
+        <div className="world-footer-line">
+          A misses 10. B misses 10. Only the overlap changed.
         </div>
       </FrameLayer>
 
       <FrameLayer opacity={intervalOpacity} className="interval-render">
         <div className="interval-main">
           <div className="section-copy">
-            <span>Partial identification</span>
-            <strong>A point estimate becomes an interval.</strong>
-            <p>Boundary claims carry witness labels. No independence assumption is inserted.</p>
+            <span>Supported claim boundary</span>
+            <strong>The score cannot choose between these worlds.</strong>
+            <p>Until overlap is measured, the supported claim is a range.</p>
           </div>
           <RemotionIntervalBand
             lower={boundedClaim.safetyLower}
             upper={boundedClaim.safetyUpper}
             point={toyExample.guardrailACatches}
-            label="honest composed safety interval"
-            lowerLabel="lower witness: max shared miss"
-            upperLabel="upper witness: separated miss"
-            caption="Frechet-Hoeffding OR constraints return a bound until dependence is observed."
+            label="composed harmful-block rate"
+            lowerLabel="lower witness: aligned misses"
+            upperLabel="upper witness: separated misses"
+            caption="The endpoints are possible worlds still allowed by the evidence."
             progress={intervalReveal}
             pointProgress={cue(frame, 41.2, 0.7, fps, artifactImpact)}
           />
@@ -220,20 +256,37 @@ export function ShatteringPointEstimateScene() {
             transform: `translateY(${(1 - cue(frame, 39.5, 1.1, fps, officialEnter)) * 18}px)`,
           }}
         >
-          <AtomTablePanel />
+          <div className="bridge-line">
+            The score tells us how many. The overlap tells us where.
+          </div>
+          <AtomTablePanel title="Four block outcomes" />
         </div>
       </FrameLayer>
 
       <FrameLayer opacity={receiptOpacity} className="receipt-render">
         <div className="receipt-grid-render">
           <EvidenceReceiptPanel progress={receiptSnap} />
-          <EvidenceArtifactPanel progress={cue(frame, 51.1, 2.2, fps, artifactImpact)} />
+          <EvidenceArtifactPanel
+            progress={cue(frame, 51.1, 2.2, fps, artifactImpact)}
+          />
           <NonClaimPanel progress={cue(frame, 53.5, 1.4, fps, officialEnter)} />
         </div>
       </FrameLayer>
 
-      <FrameLayer opacity={cue(frame, 58, 1.4, fps, officialEnter)} className="final-boundary">
-        <ClaimBoundaryCard progress={cue(frame, 58, 1.4, fps, officialEnter)} />
+      <FrameLayer opacity={finalBoundaryOpacity} className="final-boundary">
+        <ClaimBoundaryCard progress={cue(frame, 58, 0.8, fps, officialEnter)} />
+      </FrameLayer>
+
+      <FrameLayer
+        opacity={cue(frame, 60.2, 0.8, fps, officialEnter)}
+        className="private-demo-bumper"
+      >
+        <div>
+          <span>Private demo build</span>
+          <strong>
+            What to judge: clarity · credibility · artifact realism
+          </strong>
+        </div>
       </FrameLayer>
     </AbsoluteFill>
   );

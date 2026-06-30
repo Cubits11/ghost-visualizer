@@ -50,7 +50,7 @@ export function ComponentShowcase() {
         <section className="showcase-cell dot-showcase">
           <DotGrid100
             title="DotGrid100"
-            subtitle="p00 shared-miss default"
+            subtitle="aligned misses"
             overlapFailures={toyExample.maxOverlap}
             variant="shared"
             revealProgress={snap}
@@ -65,9 +65,9 @@ export function ComponentShowcase() {
             lower={boundedClaim.safetyLower}
             upper={boundedClaim.safetyUpper}
             point={90}
-            label="IntervalBand"
-            lowerLabel="lower witness"
-            upperLabel="upper witness"
+            label="composed harmful-block rate"
+            lowerLabel="lower witness: aligned misses"
+            upperLabel="upper witness: separated misses"
             caption="Witness labels remain visible on still frames."
             progress={snap}
           />

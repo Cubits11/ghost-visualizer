@@ -6,7 +6,7 @@ import { sampleReceipt } from "../evidence/sampleReceipt";
 import type { AtomKey } from "../math/guardrailComposition";
 import { clamp01 } from "./timeline";
 
-type DotKind = "neutral" | "aOnly" | "bOnly" | "shared";
+type DotKind = "blocked" | "missedByAOnly" | "missedByBOnly" | "sharedMiss";
 
 const separatedA = [0, 1, 2, 10, 11, 12, 20, 21, 30, 31];
 const separatedB = [68, 69, 78, 79, 87, 88, 89, 97, 98, 99];
@@ -15,17 +15,23 @@ const sharedA = [33, 35, 42, 47, 52, 57, 63, 64, 66, 75];
 const sharedB = [24, 25, 36, 37, 48, 58, 62, 67, 74, 76];
 
 function makeKindSet(overlapFailures: number, variant: "separated" | "shared") {
-  const both = Math.min(toyExample.maxOverlap, Math.max(toyExample.minOverlap, overlapFailures));
+  const both = Math.min(
+    toyExample.maxOverlap,
+    Math.max(toyExample.minOverlap, overlapFailures),
+  );
   const aOnly = toyExample.guardrailAFailures - both;
   const bOnly = toyExample.guardrailBFailures - both;
 
   return {
-    shared: variant === "shared" ? new Set(sharedBoth.slice(0, both)) : new Set<number>(),
-    aOnly:
+    sharedMiss:
+      variant === "shared"
+        ? new Set(sharedBoth.slice(0, both))
+        : new Set<number>(),
+    missedByAOnly:
       variant === "separated"
         ? new Set(separatedA.slice(0, aOnly))
         : new Set(sharedA.slice(0, aOnly)),
-    bOnly:
+    missedByBOnly:
       variant === "separated"
         ? new Set(separatedB.slice(0, bOnly))
         : new Set(sharedB.slice(0, bOnly)),
@@ -33,19 +39,19 @@ function makeKindSet(overlapFailures: number, variant: "separated" | "shared") {
 }
 
 function dotKind(index: number, sets: ReturnType<typeof makeKindSet>): DotKind {
-  if (sets.shared.has(index)) {
-    return "shared";
+  if (sets.sharedMiss.has(index)) {
+    return "sharedMiss";
   }
 
-  if (sets.aOnly.has(index)) {
-    return "aOnly";
+  if (sets.missedByAOnly.has(index)) {
+    return "missedByAOnly";
   }
 
-  if (sets.bOnly.has(index)) {
-    return "bOnly";
+  if (sets.missedByBOnly.has(index)) {
+    return "missedByBOnly";
   }
 
-  return "neutral";
+  return "blocked";
 }
 
 export function FrameLayer({
@@ -163,7 +169,7 @@ export function DotGrid100({
           <p>{subtitle}</p>
         </div>
         <div className="risk-chip">
-          <span>shared miss</span>
+          <span>shared miss danger</span>
           <strong>{sharedCount}%</strong>
         </div>
       </header>
@@ -180,7 +186,7 @@ export function DotGrid100({
               className={`remotion-dot dot-${kind}`}
               cx={offset + col * gap}
               cy={offset + row * gap}
-              r={kind === "shared" ? 8.6 : kind === "neutral" ? 4.2 : 5.8}
+              r={kind === "sharedMiss" ? 8.6 : kind === "blocked" ? 4.2 : 5.8}
               style={{
                 opacity: 0.12 + p * 0.88,
                 transform: `scale(${0.68 + p * 0.32})`,
@@ -193,7 +199,9 @@ export function DotGrid100({
       <footer>
         <span>A misses {toyExample.guardrailAFailures}%</span>
         <span>B misses {toyExample.guardrailBFailures}%</span>
-        <span>{variant === "shared" ? "aligned shared misses" : "separated misses"}</span>
+        <span>
+          {variant === "shared" ? "aligned misses" : "separated misses"}
+        </span>
       </footer>
     </article>
   );
@@ -223,7 +231,8 @@ export function RemotionIntervalBand({
   const p = clamp01(progress);
   const pointP = clamp01(pointProgress);
   const span = Math.max(1, upper - lower);
-  const pointPosition = point === undefined ? undefined : ((point - lower) / span) * 100;
+  const pointPosition =
+    point === undefined ? undefined : ((point - lower) / span) * 100;
 
   return (
     <div className="remotion-interval-band">
@@ -274,21 +283,22 @@ export function AtomTablePanel({
 export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
   const p = clamp01(progress);
   const lines = [
-    { key: "metric", label: "Metric", value: sampleReceipt.boundedClaim.metric },
+    { key: "policy", label: "Policy", value: sampleReceipt.policyId },
+    { key: "dataset", label: "Dataset", value: sampleReceipt.datasetId },
     {
-      key: "blockOverlap",
-      label: "p11 block overlap",
-      value: `${Math.round(sampleReceipt.harmful.blockOverlap * 100)}% both block`,
+      key: "composition",
+      label: "Composition rule",
+      value: "OR: block if either guardrail blocks",
     },
     {
-      key: "sharedMissRate",
-      label: "p00 shared miss",
-      value: `${Math.round(sampleReceipt.harmful.sharedMissRate * 100)}% danger cell`,
+      key: "observedOverlap",
+      label: "Observed overlap",
+      value: `${Math.round(sampleReceipt.harmful.sharedMissRate * 100)}% shared miss / ${Math.round(sampleReceipt.harmful.blockOverlap * 100)}% both block`,
     },
     {
       key: "witnesses",
       label: "Endpoint witnesses",
-      value: `${sampleReceipt.witnesses.length} attached`,
+      value: `${sampleReceipt.witnesses.length} possible-world endpoints`,
     },
     {
       key: "nonClaims",
@@ -306,8 +316,8 @@ export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
       }}
     >
       <div className="receipt-topline">
-        <span>GHOST RECEIPT</span>
-        <strong>bounded claim assembled</strong>
+        <span>Evidence receipt</span>
+        <strong>claim evidence attached</strong>
       </div>
       <p>{sampleReceipt.boundedClaim.statement}</p>
       <div className="receipt-lines">
@@ -387,20 +397,23 @@ export function NonClaimPanel({ progress = 1 }: { progress?: number }) {
 
 export function ClaimBoundaryCard({ progress = 1 }: { progress?: number }) {
   return (
-    <article className="claim-boundary-card" style={{ opacity: clamp01(progress) }}>
-      <span>Corrected VIS-001 semantics</span>
-      <strong>p00 is the danger cell.</strong>
+    <article
+      className="claim-boundary-card"
+      style={{ opacity: clamp01(progress) }}
+    >
+      <span>Supported claim boundary</span>
+      <strong>The shared miss is the danger cell.</strong>
       <p>
-        p11 is both-block overlap. Missing overlap is treated as aligned shared misses for risk
-        review until evidence proves otherwise.
+        Both Block is confirmed block overlap. The honest claim must keep the
+        aligned-miss world possible until overlap evidence rules it out.
       </p>
       <RemotionIntervalBand
         lower={boundedClaim.safetyLower}
         upper={boundedClaim.safetyUpper}
-        label="composed safety permitted by evidence"
-        lowerLabel="lower witness: aligned shared misses"
+        label="composed harmful-block rate"
+        lowerLabel="lower witness: aligned misses"
         upperLabel="upper witness: separated misses"
-        caption="The interval carries witness labels because a bound needs inspectable endpoints."
+        caption="The endpoints are possible worlds still allowed by the evidence."
         progress={progress}
       />
     </article>

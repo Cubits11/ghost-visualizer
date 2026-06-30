@@ -1,48 +1,37 @@
-# VIS-001 Public Readiness Score
+# VIS-001 Public Readiness Score — after clarity pass
 
-Date: 2026-06-30
+## Current score
 
-Final recommendation: private serious-contact demo.
+**7.8 / 10 for private serious-contact demo quality**
 
-## Scores
+VIS-001 is now meaning-led instead of notation-led. The render explains the four atom cells with human labels first, keeps `p00/p01/p10/p11` as secondary notation, and makes the shared-miss danger case visible without requiring prior math fluency.
 
-| Dimension | Score / 10 | Rationale |
-| --- | ---: | --- |
-| Cognitive clarity | 7.2 | The central idea is understandable: a 90% marginal hides overlap. p00/p11 semantics are now repeated clearly. Still heavy for cold viewers. |
-| Visual hierarchy | 7.0 | Score, worlds, interval, and receipt each have a clear dominant element. Receipt and showcase remain dense. |
-| Mathematical faithfulness | 8.6 | p00 shared miss and p11 both-block overlap are consistently framed. The interval/witness semantics are credible. |
-| Motion timing | 7.1 | The dead gap at 14-15s is fixed. Some midsection holds still feel long and less premium. |
-| Artifact realism | 7.0 | Receipt avoids fake provenance and shows non-claims. Artifact code is still more texture than inspectable evidence. |
-| Emotional impact | 6.7 | The idea has bite, especially at the world split. The execution is intellectually sharp but not yet visceral. |
-| Public readiness | 5.8 | Not ready for a cold public audience. It still needs less density and a more memorable first-20-second emotional arc. |
-| Portfolio readiness | 6.7 | Good enough as a serious work-in-progress case study. Not yet a flagship reel piece. |
-| Business/prospect readiness | 7.2 | Strongest for security, AI safety, and evidence-infrastructure conversations where the viewer already cares about claims and audits. |
+## Scorecard
 
-## Audience Decision
+| Dimension | Score | Notes |
+|---|---:|---|
+| Cognitive clarity | 8.1 | The four cells now read as Shared Miss, A Only, B Only, and Both Block. The danger cell is human-readable in one second. |
+| Visual hierarchy | 7.8 | World split, interval, and receipt now have stronger headline hierarchy. The receipt remains intentionally dense, but less schema-first. |
+| Mathematical faithfulness | 8.7 | Shared Miss is correctly framed as neither guardrail catches it. Both Block is framed as confirmed block overlap, not danger. |
+| Cold-viewer readiness | 7.3 | A cold technical viewer can follow the story. A broad public viewer would still need tighter pacing and less density. |
+| Artifact realism | 7.4 | Evidence receipt now emphasizes policy, dataset, composition rule, observed overlap, endpoint witnesses, and non-claims before data-model texture. |
+| Private demo framing | 8.5 | Ending now explicitly says “Private demo build” and tells reviewers to judge clarity, credibility, and artifact realism. |
 
-| Audience | Readiness | Recommendation |
-| --- | --- | --- |
-| Internal review | Ready | Use it. The render is useful for evaluating semantics, timing, and product direction. |
-| Private serious contacts | Ready with context | Good for professors, AI safety/security people, and technical prospects if framed as a bounded-claim visual essay. |
-| Public teaser | Not ready | Too dense and too taxonomic for a cold audience. Needs a shorter, sharper teaser cut. |
-| Public flagship | Not ready | Needs a stronger original visual language, better endpoint-witness evidence, and less generic card grammar. |
+## Acceptance review
 
-## What Changed In This Pass
+- Four atom cells are understandable without knowing `p00` notation.
+- Shared Miss is visibly the danger cell.
+- Both Block is visibly a confirmed block / block overlap cell, not a danger cell.
+- The world split now says: same scores, different miss overlap, different risk.
+- The interval is described as a supported range, not a mystical correction.
+- The receipt carries claim evidence while keeping JSON/schema language secondary.
+- The ending explicitly frames the video as a private demo build.
+- No visible text adds certification, real signing, fake signatures, stock assets, 3D, or a new concept.
 
-- Removed the 14-15s empty transition by retiming the false-inference and hidden-variable layers.
-- Made the first 10s more honest by changing the score caption to "overlap not reported" and guardrail captions to "marginal only."
-- Replaced raw `sharedMissRate`/receipt variable labels with viewer-facing semantic labels.
-- Strengthened the existing shared-miss dot treatment without adding colors or metaphors.
-- Cleaned the ComponentShowcase still so it no longer shows clipped text.
-- Regenerated `renders/vis001.mp4` and affected stills.
+## Remaining limitations
 
-## Verification
+This is still not a public flagship video. The opening idea is stronger, but public-scale attention would need a sharper first 8 seconds, more auditory/narrative rhythm, and fewer simultaneous textual elements. For professors, AWS/security contacts, and AI safety builders, it is now strong enough to send as a serious private demo.
 
-- `npm run typecheck` passed.
-- `npm run render:vis001` completed successfully.
-- Final MP4 probe: 1920x1080, 30fps, 1860 video frames, 62.058667s.
-- Visual spot checks performed on rendered MP4 frames at 15s, 29s, and 56s.
+## Recommended use
 
-## Bottom Line
-
-VIS-001 now clears a private serious-contact bar. It does not clear a public teaser or flagship bar yet. The current best use is a carefully framed demo that proves the Ghost Visualizer can turn a subtle AI safety/math claim into deterministic evidence cinema.
+Use this version as a private credibility artifact: a short visual proof that Ghost Visualizer can turn a subtle dependence-aware safety claim into a bounded, inspectable evidence story.
