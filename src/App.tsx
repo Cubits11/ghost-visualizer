@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CinematicShell } from "./components/CinematicShell";
 import { scenes } from "./data/scenes";
 import { toyExample } from "./data/mathExamples";
@@ -26,12 +26,17 @@ export default function App() {
 
   const activeScene = scenes[sceneIndex];
 
-  const goToScene = (index: number) => {
+  const goToScene = useCallback((index: number) => {
     setSceneIndex(Math.min(scenes.length - 1, Math.max(0, index)));
-  };
+  }, []);
 
-  const nextScene = () => goToScene(sceneIndex + 1);
-  const previousScene = () => goToScene(sceneIndex - 1);
+  const nextScene = useCallback(() => {
+    setSceneIndex((index) => Math.min(scenes.length - 1, index + 1));
+  }, []);
+
+  const previousScene = useCallback(() => {
+    setSceneIndex((index) => Math.max(0, index - 1));
+  }, []);
 
   const scene = useMemo(() => {
     switch (activeScene.id) {

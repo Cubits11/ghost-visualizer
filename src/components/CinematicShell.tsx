@@ -1,5 +1,9 @@
-import { PropsWithChildren, useEffect } from "react";
-import { SceneSpec } from "../data/scenes";
+import { PropsWithChildren, useEffect, useMemo, type CSSProperties } from "react";
+import {
+  SceneSpec,
+  recordingDurationBySceneId,
+  totalRecordingDurationMs,
+} from "../data/scenes";
 import { SceneNavigator } from "./SceneNavigator";
 import { SceneStage } from "./SceneStage";
 
@@ -29,6 +33,17 @@ export function CinematicShell({
   onToggleRecording,
   children,
 }: CinematicShellProps) {
+  const sceneDurationMs = recordingDurationBySceneId[activeScene.id];
+  const elapsedBeforeMs = useMemo(
+    () =>
+      scenes
+        .slice(0, sceneIndex)
+        .reduce((sum, scene) => sum + recordingDurationBySceneId[scene.id], 0),
+    [sceneIndex, scenes],
+  );
+  const recordingProgressStart = elapsedBeforeMs / totalRecordingDurationMs;
+  const recordingProgressEnd = (elapsedBeforeMs + sceneDurationMs) / totalRecordingDurationMs;
+
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement | null;
@@ -65,23 +80,29 @@ export function CinematicShell({
   }, [onNext, onPrevious, onTogglePaused, onToggleRecording]);
 
   useEffect(() => {
-    if (paused || sceneIndex >= scenes.length - 1) {
+    if (!recordingMode || paused || sceneIndex >= scenes.length - 1) {
       return;
     }
 
     const timer = window.setTimeout(() => {
       onNext();
-    }, activeScene.duration * 1000);
+    }, sceneDurationMs);
 
     return () => window.clearTimeout(timer);
-  }, [activeScene.duration, onNext, paused, sceneIndex, scenes.length]);
+  }, [onNext, paused, recordingMode, sceneDurationMs, sceneIndex, scenes.length]);
 
   return (
     <div
       className={`app-shell${recordingMode ? " is-recording" : ""}${
         paused ? " is-paused" : ""
       }`}
-      style={{ "--scene-duration": `${activeScene.duration}s` } as React.CSSProperties}
+      style={
+        {
+          "--scene-duration": `${sceneDurationMs}ms`,
+          "--recording-progress-start": recordingProgressStart,
+          "--recording-progress-end": recordingProgressEnd,
+        } as CSSProperties
+      }
     >
       <header className="app-chrome">
         <div>
@@ -97,7 +118,14 @@ export function CinematicShell({
       <main className="stage-wrap">
         <div className="cinema-frame">
           <SceneStage activeScene={activeScene}>{children}</SceneStage>
-          <div className="scene-progress" aria-hidden="true" key={activeScene.id} />
+          {recordingMode ? (
+            <>
+              <div className="recording-progress" aria-hidden="true">
+                <span key={activeScene.id} />
+              </div>
+              <div className="scene-progress" aria-hidden="true" key={activeScene.id} />
+            </>
+          ) : null}
         </div>
       </main>
 
