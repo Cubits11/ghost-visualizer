@@ -75,6 +75,30 @@ export function FrameLayer({
   );
 }
 
+export function ViewerQuestion({
+  children,
+  progress = 1,
+  className = "",
+}: {
+  children: ReactNode;
+  progress?: number;
+  className?: string;
+}) {
+  const p = clamp01(progress);
+
+  return (
+    <div
+      className={`viewer-question${className ? ` ${className}` : ""}`}
+      style={{
+        opacity: p,
+        transform: `translateY(${(1 - p) * -10}px)`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function ScoreObject({
   label,
   value,
@@ -197,10 +221,15 @@ export function DotGrid100({
         })}
       </svg>
       <footer>
-        <span>A misses {toyExample.guardrailAFailures}%</span>
-        <span>B misses {toyExample.guardrailBFailures}%</span>
         <span>
-          {variant === "shared" ? "aligned misses" : "separated misses"}
+          <em>fixed</em>A misses {toyExample.guardrailAFailures}%
+        </span>
+        <span>
+          <em>fixed</em>B misses {toyExample.guardrailBFailures}%
+        </span>
+        <span>
+          <em>hidden</em>
+          {variant === "shared" ? "shared misses 10%" : "shared misses 0%"}
         </span>
       </footer>
     </article>
@@ -217,6 +246,9 @@ export function RemotionIntervalBand({
   caption,
   progress = 1,
   pointProgress = progress,
+  pointLabel,
+  pointState,
+  lockLabels,
 }: {
   lower: number;
   upper: number;
@@ -227,6 +259,12 @@ export function RemotionIntervalBand({
   caption: string;
   progress?: number;
   pointProgress?: number;
+  pointLabel?: string;
+  pointState?: "rejected";
+  lockLabels?: {
+    point: string;
+    range: string;
+  };
 }) {
   const p = clamp01(progress);
   const pointP = clamp01(pointProgress);
@@ -242,20 +280,26 @@ export function RemotionIntervalBand({
           [{lower}%, {upper}%]
         </strong>
       </div>
+      {lockLabels ? (
+        <div className="interval-lock-row">
+          <span>{lockLabels.point}</span>
+          <strong>{lockLabels.range}</strong>
+        </div>
+      ) : null}
       <div className="interval-track">
         <span className="interval-endpoint interval-endpoint-lower" />
         <span className="interval-endpoint interval-endpoint-upper" />
         <div className="interval-fill" style={{ transform: `scaleX(${p})` }} />
         {pointPosition !== undefined ? (
           <div
-            className="interval-point"
+            className={`interval-point${pointState ? ` is-${pointState}` : ""}`}
             style={{
               left: `${pointPosition}%`,
               opacity: pointP,
               transform: `translate(-50%, -50%) scale(${pointP})`,
             }}
           >
-            <span>{point}%</span>
+            <span>{pointLabel ?? `${point}%`}</span>
           </div>
         ) : null}
       </div>
@@ -283,26 +327,26 @@ export function AtomTablePanel({
 export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
   const p = clamp01(progress);
   const lines = [
-    { key: "policy", label: "Policy", value: sampleReceipt.policyId },
-    { key: "dataset", label: "Dataset", value: sampleReceipt.datasetId },
+    { key: "policy", label: "policy", value: sampleReceipt.policyId },
+    { key: "dataset", label: "dataset", value: sampleReceipt.datasetId },
     {
       key: "composition",
-      label: "Composition rule",
+      label: "composition rule",
       value: "OR: block if either guardrail blocks",
     },
     {
       key: "observedOverlap",
-      label: "Observed overlap",
+      label: "observed overlap",
       value: `${Math.round(sampleReceipt.harmful.sharedMissRate * 100)}% shared miss / ${Math.round(sampleReceipt.harmful.blockOverlap * 100)}% both block`,
     },
     {
       key: "witnesses",
-      label: "Endpoint witnesses",
+      label: "endpoint witnesses",
       value: `${sampleReceipt.witnesses.length} possible-world endpoints`,
     },
     {
       key: "nonClaims",
-      label: "Non-claims",
+      label: "non-claims",
       value: `${sampleReceipt.nonClaims.length} blocked assertions`,
     },
   ];
@@ -316,10 +360,11 @@ export function EvidenceReceiptPanel({ progress = 1 }: { progress?: number }) {
       }}
     >
       <div className="receipt-topline">
-        <span>Evidence receipt</span>
-        <strong>claim evidence attached</strong>
+        <span>Supported claim</span>
+        <strong>evidence receipt</strong>
       </div>
       <p>{sampleReceipt.boundedClaim.statement}</p>
+      <div className="receipt-note">artifact schema, not a certification</div>
       <div className="receipt-lines">
         {lines.map(({ key, label, value }, index) => {
           const lineP = clamp01(p * 1.35 - index * 0.12);
@@ -371,7 +416,7 @@ export function NonClaimPanel({ progress = 1 }: { progress?: number }) {
       }}
     >
       <header>
-        <span>NON-CLAIMS</span>
+        <span>Non-claims</span>
         <strong>the receipt refuses these assertions</strong>
       </header>
       <div>
@@ -401,11 +446,11 @@ export function ClaimBoundaryCard({ progress = 1 }: { progress?: number }) {
       className="claim-boundary-card"
       style={{ opacity: clamp01(progress) }}
     >
-      <span>Supported claim boundary</span>
+      <span>Supported claim</span>
       <strong>The shared miss is the danger cell.</strong>
       <p>
-        Both Block is confirmed block overlap. The honest claim must keep the
-        aligned-miss world possible until overlap evidence rules it out.
+        Not claimed: a single exact composed score before overlap is measured.
+        Both Block is confirmed block overlap.
       </p>
       <RemotionIntervalBand
         lower={boundedClaim.safetyLower}
@@ -415,6 +460,10 @@ export function ClaimBoundaryCard({ progress = 1 }: { progress?: number }) {
         upperLabel="upper witness: separated misses"
         caption="The endpoints are possible worlds still allowed by the evidence."
         progress={progress}
+        lockLabels={{
+          point: "single score rejected",
+          range: "range supported",
+        }}
       />
     </article>
   );

@@ -14,13 +14,15 @@ const cells: Array<{
   label: string;
   symbol: string;
   description: string;
+  badge?: string;
 }> = [
   {
     key: "p00",
     className: "atom-shared-miss",
     label: "Shared Miss",
     symbol: "p00",
-    description: "neither guardrail catches it · danger cell",
+    description: "neither guardrail catches it",
+    badge: "danger cell",
   },
   {
     key: "p01",
@@ -41,7 +43,8 @@ const cells: Array<{
     className: "atom-both-block",
     label: "Both Block",
     symbol: "p11",
-    description: "both guardrails catch it · confirmed block overlap",
+    description: "both guardrails catch it",
+    badge: "confirmed block",
   },
 ];
 
@@ -65,8 +68,9 @@ export function AtomTable({
             className={`atom-cell ${cell.className}`}
             role="cell"
           >
-            <span>{cell.symbol}</span>
             <strong>{cell.label}</strong>
+            <span>{cell.symbol}</span>
+            {cell.badge ? <b>{cell.badge}</b> : null}
             <em>
               {cell.description} · {atomPercent(counts[cell.key], total)}
             </em>

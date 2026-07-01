@@ -1,20 +1,20 @@
-# VIS-001 Public Readiness Score — after clarity pass
+# VIS-001 Public Readiness Score - after cognitive legibility pass
 
 ## Current score
 
-**7.8 / 10 for private serious-contact demo quality**
+**8.2 / 10 for private serious-contact demo quality**
 
-VIS-001 is now meaning-led instead of notation-led. The render explains the four atom cells with human labels first, keeps `p00/p01/p10/p11` as secondary notation, and makes the shared-miss danger case visible without requiring prior math fluency.
+VIS-001 is now meaning-led and self-auditing. The render explains the four atom cells with human labels first, keeps `p00/p01/p10/p11` as secondary notation, and adds quiet viewer questions, fixed/hidden labels, and claim-boundary cues so the core argument can survive muted or paused viewing.
 
 ## Scorecard
 
 | Dimension | Score | Notes |
 |---|---:|---|
-| Cognitive clarity | 8.1 | The four cells now read as Shared Miss, A Only, B Only, and Both Block. The danger cell is human-readable in one second. |
-| Visual hierarchy | 7.8 | World split, interval, and receipt now have stronger headline hierarchy. The receipt remains intentionally dense, but less schema-first. |
+| Cognitive clarity | 8.6 | Viewer-question captions, fixed/hidden labels, and claim-boundary cues make each beat easier to audit without narration. |
+| Visual hierarchy | 8.2 | Shared Miss wins the atom table, the world split identifies what changed, and the interval makes the range the supported object. |
 | Mathematical faithfulness | 8.7 | Shared Miss is correctly framed as neither guardrail catches it. Both Block is framed as confirmed block overlap, not danger. |
-| Cold-viewer readiness | 7.3 | A cold technical viewer can follow the story. A broad public viewer would still need tighter pacing and less density. |
-| Artifact realism | 7.4 | Evidence receipt now emphasizes policy, dataset, composition rule, observed overlap, endpoint witnesses, and non-claims before data-model texture. |
+| Cold-viewer readiness | 8.0 | A cold technical viewer can now recover the core sentence: same scores, different overlap, different risk. |
+| Artifact realism | 7.8 | Evidence receipt now reads as a checklist before it reads as schema, with an explicit artifact-schema caveat. |
 | Private demo framing | 8.5 | Ending now explicitly says “Private demo build” and tells reviewers to judge clarity, credibility, and artifact realism. |
 
 ## Acceptance review
@@ -23,8 +23,11 @@ VIS-001 is now meaning-led instead of notation-led. The render explains the four
 - Shared Miss is visibly the danger cell.
 - Both Block is visibly a confirmed block / block overlap cell, not a danger cell.
 - The world split now says: same scores, different miss overlap, different risk.
+- The world split now shows what is fixed and what is hidden.
 - The interval is described as a supported range, not a mystical correction.
+- The point estimate is visibly insufficient; the interval is the supported claim.
 - The receipt carries claim evidence while keeping JSON/schema language secondary.
+- Non-claims and evidence boundaries are visible as first-class review objects.
 - The ending explicitly frames the video as a private demo build.
 - No visible text adds certification, real signing, fake signatures, stock assets, 3D, or a new concept.
 

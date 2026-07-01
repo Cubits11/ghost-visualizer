@@ -52,11 +52,24 @@ Applied a meaning-first clarity pass to the existing VIS-001 Remotion scene with
   - `bOnly` → `missedByBOnly`
   - `shared` → `sharedMiss`
 
+### Cognitive legibility pass
+
+- Added quiet scene-level viewer-question captions across the major VIS-001 beats.
+- Added fixed/hidden grammar to the world split: the miss counts stay fixed while shared-miss overlap changes.
+- Promoted atom-table human labels before notation and added micro-badges for “danger cell” and “confirmed block.”
+- Added claim-boundary labels for known score evidence, hidden overlap, supported range claims, and non-claims.
+- Made the interval scene read as “range supported” and “single score rejected,” with the point estimate visually marked as insufficient.
+- Made the receipt panel read more like an evidence checklist, with policy, dataset, rule, observed overlap, endpoint witnesses, and non-claims before schema texture.
+- Added `VIS001_SILENT_VIEWER_QA.md` as a no-narration reviewer checklist.
+- Added `VIS001_STILL_REVIEW.md` to define the intended takeaway and forbidden implication for each QA still.
+- Added `npm run lint:vis001-copy` to catch obvious internal/changelog and fake-certification screen-copy regressions.
+
 ## Validation notes
 
 - `npm run test` passed.
 - `npm run build` passed.
 - `npm run generate:evidence` passed.
+- `npm run lint:vis001-copy` passed.
 - Five VIS-001 QA stills were regenerated.
-- Component showcase still was regenerated at reduced scale after Chromium instability.
-- Full MP4 render was attempted, but Chromium repeatedly crashed inside the container during long-frame rendering; see final delivery note.
+- Component showcase still was regenerated.
+- `npm run render:vis001` completed after the script was hardened to use Remotion Chrome for Testing with lower concurrency and a longer frame timeout.

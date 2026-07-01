@@ -25,6 +25,7 @@ import {
   NonClaimPanel,
   RemotionIntervalBand,
   ScoreObject,
+  ViewerQuestion,
 } from "./primitives";
 import { cue, hold, seconds } from "./timeline";
 
@@ -118,6 +119,9 @@ export function ShatteringPointEstimateScene() {
       <div className="film-grain" />
 
       <FrameLayer opacity={falseCertaintyOpacity} className="cold-open-render">
+        <ViewerQuestion progress={officialScore}>
+          Question: what does the score leave out?
+        </ViewerQuestion>
         <div className="scene-number">
           <span>VIS-001</span>
           <strong>The Shattering Point Estimate</strong>
@@ -164,6 +168,9 @@ export function ShatteringPointEstimateScene() {
       </FrameLayer>
 
       <FrameLayer opacity={hiddenOpacity} className="hidden-render">
+        <ViewerQuestion progress={hiddenVariable}>
+          Question: where do the misses land?
+        </ViewerQuestion>
         <div
           className="hidden-assumption-card"
           style={{
@@ -174,6 +181,16 @@ export function ShatteringPointEstimateScene() {
           <span>Hidden variable</span>
           <strong>where the misses overlap</strong>
           <p>Two guardrails can miss different prompts — or the same ones.</p>
+          <div className="claim-boundary-pair">
+            <div>
+              <span>Known from scores</span>
+              <strong>A misses 10 · B misses 10</strong>
+            </div>
+            <div>
+              <span>Hidden until overlap is measured</span>
+              <strong>same misses or different misses?</strong>
+            </div>
+          </div>
           <div className="atom-callout-grid">
             <span className="atom-callout is-danger">
               Shared Miss <em>p00 · neither guardrail catches it</em>
@@ -202,6 +219,9 @@ export function ShatteringPointEstimateScene() {
       </FrameLayer>
 
       <FrameLayer opacity={worldsOpacity} className="worlds-render">
+        <ViewerQuestion progress={worldReveal}>
+          Question: can the same scores hide different risk?
+        </ViewerQuestion>
         <div className="section-copy">
           <span>Same scores. Different miss overlap. Different risk.</span>
           <strong>
@@ -226,16 +246,40 @@ export function ShatteringPointEstimateScene() {
           />
         </div>
         <div className="world-footer-line">
-          A misses 10. B misses 10. Only the overlap changed.
+          <div>
+            <span>fixed</span>
+            <strong>A misses 10 · B misses 10</strong>
+          </div>
+          <div>
+            <span>hidden</span>
+            <strong>shared misses can be 0 or 10</strong>
+          </div>
+          <div>
+            <span>risk consequence</span>
+            <strong>separated misses → fewer shared escapes · aligned misses → dangerous concentration</strong>
+          </div>
         </div>
       </FrameLayer>
 
       <FrameLayer opacity={intervalOpacity} className="interval-render">
+        <ViewerQuestion progress={intervalReveal}>
+          Question: what claim is still supported?
+        </ViewerQuestion>
         <div className="interval-main">
           <div className="section-copy">
             <span>Supported claim boundary</span>
             <strong>The score cannot choose between these worlds.</strong>
             <p>Until overlap is measured, the supported claim is a range.</p>
+          </div>
+          <div className="interval-boundary-cues">
+            <span>
+              <em>Supported claim</em>
+              a range
+            </span>
+            <span>
+              <em>Not claimed</em>
+              a single exact composed score
+            </span>
           </div>
           <RemotionIntervalBand
             lower={boundedClaim.safetyLower}
@@ -247,6 +291,12 @@ export function ShatteringPointEstimateScene() {
             caption="The endpoints are possible worlds still allowed by the evidence."
             progress={intervalReveal}
             pointProgress={cue(frame, 41.2, 0.7, fps, artifactImpact)}
+            pointLabel="single score"
+            pointState="rejected"
+            lockLabels={{
+              point: "single score rejected",
+              range: "range supported",
+            }}
           />
         </div>
         <div
@@ -264,6 +314,9 @@ export function ShatteringPointEstimateScene() {
       </FrameLayer>
 
       <FrameLayer opacity={receiptOpacity} className="receipt-render">
+        <ViewerQuestion progress={receiptSnap}>
+          Question: what evidence travels with the claim?
+        </ViewerQuestion>
         <div className="receipt-grid-render">
           <EvidenceReceiptPanel progress={receiptSnap} />
           <EvidenceArtifactPanel
@@ -282,6 +335,9 @@ export function ShatteringPointEstimateScene() {
         className="private-demo-bumper"
       >
         <div>
+          <ViewerQuestion className="is-bumper">
+            Question: can a reviewer audit the story without narration?
+          </ViewerQuestion>
           <span>Private demo build</span>
           <strong>
             What to judge: clarity · credibility · artifact realism

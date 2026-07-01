@@ -11,28 +11,21 @@
   - `renders/stills/05_receipt_snap.png`
 - Regenerated component showcase still:
   - `renders/stills/component-showcase.png`
+- Regenerated full MP4:
+  - `renders/vis001.mp4`
 - Passed:
   - `npm run test`
   - `npm run build`
   - `npm run generate:evidence`
+  - `npm run lint:vis001-copy`
+  - `npm run render:vis001`
 
-## Not completed in this container
+## Render notes
 
-`renders/vis001.mp4` was not regenerated successfully in this execution environment.
+`npm run render:vis001` initially timed out in the bundled headless shell at frame 1082. A lower-concurrency retry with a longer timeout also timed out at frame 494.
 
-The first render attempt failed because Remotion tried to download Chrome Headless Shell and the container could not resolve `remotion.media`. After switching to the system Chromium executable and clearing a container URL-block policy for local rendering, stills rendered successfully. The full 1,860-frame MP4 render repeatedly crashed/timed out inside Chromium during long-frame rendering, even after lowering concurrency.
-
-## Local render command that should be used on a normal machine
+No system Chrome/Chromium executable was present in the usual macOS app paths. The render script now uses Remotion's Chrome for Testing mode, lower concurrency, and a longer frame timeout:
 
 ```bash
 npm run render:vis001
-```
-
-If Remotion cannot find a browser locally, use a system Chrome/Chromium executable:
-
-```bash
-npx remotion render src/Root.tsx ShatteringPointEstimateScene renders/vis001.mp4 \
-  --browser-executable=/path/to/chrome-or-chromium \
-  --chrome-mode=chrome-for-testing \
-  --concurrency=2
 ```
