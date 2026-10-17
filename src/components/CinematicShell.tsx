@@ -110,7 +110,7 @@ export function CinematicShell({
       <header className="app-chrome">
         <div>
           <p className="eyebrow">Ghost Visualizer</p>
-          <h1>Why AI Safety Scores Lie</h1>
+          <h1>What AI Guardrail Scores Cannot Tell You</h1>
         </div>
         <div className="chrome-meta">
           <span>{activeScene.number}</span>

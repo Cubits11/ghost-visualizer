@@ -24,7 +24,7 @@ What may be delusional:
 - Turning every metaphor into a feature.
 - Assuming "interactive visual essay platform" is a product by itself. It is not. The product is claim discipline made visible.
 
-The flagship should be: **Why AI Safety Scores Lie** as the canonical public demo, followed by **The Correlation Cliff** as the second artifact and **How to Read an AI Safety Receipt** as the credibility bridge.
+The flagship should be: **What AI Guardrail Scores Cannot Tell You** as the canonical public demo, followed by **The Correlation Cliff** as the second artifact and **How to Read an AI Safety Receipt** as the credibility bridge.
 
 What would impress different audiences:
 - A professor: formal definitions, proof sketches, Fréchet-Hoeffding bounds, endpoint witnesses, invariant tests, citations, and no overclaiming.
@@ -138,7 +138,7 @@ Immediate visualization priorities: Atom Table Fluid Machine, Correlation Cliff,
 
 | Title | Thesis | Hook + metaphor | Required visuals | Why people care / why experts respect it | Difficulty | Length |
 |---|---|---|---|---|---|---|
-| Why AI Safety Scores Lie | Marginal scores can hide shared failure. | "Two 90% guardrails can still fail together." Dot worlds. | Current scenes. | Clear public shock; valid partial-identification lesson. | Done-ish. | 5 min. |
+| What AI Guardrail Scores Cannot Tell You | Marginal scores can hide shared failure. | "Two 90% guardrails can still fail together." Dot worlds. | Current scenes. | Clear public shock; valid partial-identification lesson. | Done-ish. | 5 min. |
 | The Correlation Cliff | Small dependence changes can destroy comfort. | A safety plateau collapses. | Correlation Cliff, fluid atoms. | Makes risk visceral; formal dependence sensitivity. | Medium. | 5 min. |
 | The Hidden Geometry of Guardrails | Safety claims live in feasible regions. | A score becomes a polytope. | Possible Worlds Polytope, endpoint witnesses. | Visual math spectacle; credible convex-constraint framing. | Hard. | 12 min. |
 | Why "99% Safe" Can Be Meaningless | A point score without assumptions is not a guarantee. | A shining number casts a long shadow. | Safety Shadowgraph, Assumption Furnace. | Destroys false certainty; respects identification limits. | Medium. | 5 min. |
@@ -159,7 +159,7 @@ Immediate visualization priorities: Atom Table Fluid Machine, Correlation Cliff,
 | Safety Theater | Controls can look impressive while proving little. | A stage set collapses behind the curtain. | Non-claim firewall, receipt black box. | Broad resonance; must avoid cynicism. | Medium. | 5 min. |
 | The Receipt Is the Product | Governance value lives in bounded, reproducible claims. | A receipt becomes an artifact people can trust. | Evidence galaxy, witness museum, builder output. | Enterprise bridge; rigorous if real. | Medium. | 5 min. |
 
-The best series arc is: **Scores Lie -> Correlation Cliff -> Four Atoms -> Safety Claim -> Receipt -> Benchmarks -> Red Teams -> Partial Identification**.
+The best series arc is: **Guardrail Score Limits -> Correlation Cliff -> Four Atoms -> Safety Claim -> Receipt -> Benchmarks -> Red Teams -> Partial Identification**.
 
 ## 8. Repository Architecture Evolution
 

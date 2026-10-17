@@ -2,11 +2,11 @@
 
 Ghost Visualizer is a React/Vite visual essay about a narrow but important evaluation problem: two guardrails can each score 90% on harmful examples while their composed OR safety is only bounded, not determined, unless dependence is inspected.
 
-The current demo exists to visualize bounded claims under stated assumptions. It is not an AI safety certificate and does not claim deployment readiness.
+The current demo exists to visualize bounded claims under stated assumptions. Its title is **What AI Guardrail Scores Cannot Tell You**: marginal scores leave shared failures undetermined; that does not establish deception. It is not an AI safety certificate and does not claim deployment readiness.
 
 ## What It Does
 
-- Plays a seven-scene cinematic story, “Why AI Safety Scores Lie.”
+- Plays a seven-scene cinematic story, “What AI Guardrail Scores Cannot Tell You.”
 - Shows how identical marginal guardrail scores can hide shared misses.
 - Computes harmful-class atom counts, marginals, OR composition, Frechet-Hoeffding bounds, endpoint witnesses, and a receipt object from deterministic sample rows.
 - Provides Evidence Mode for inspecting the computed receipt and downloading JSON.
