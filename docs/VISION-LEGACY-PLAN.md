@@ -217,7 +217,7 @@ The receipt for this phase is the live URL plus the verification log, in the Pha
 
 Each is its own titled PR, in a different repository, opened and not merged by the author.
 
-| Repository | Change | State on 2026-10-24 |
+| Repository | Change | State when written, before the Phase 1 deploy |
 |---|---|---|
 | `cc-framework` | One README sentence: Ghost Visualizer as an interactive companion to the bounds, on a constructed example. Plus regenerated evidence cards, because CI pins the README digest (§6.1). | Draft PR [cc-framework#67](https://github.com/Cubits11/cc-framework/pull/67), blocked on the Phase 1 deploy |
 | `Cubits11/Cubits11` (profile) | Add Ghost Visualizer, with the demo link, to "Now" | Draft PR [Cubits11#1](https://github.com/Cubits11/Cubits11/pull/1), blocked on the Phase 1 deploy |
