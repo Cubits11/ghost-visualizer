@@ -1,0 +1,77 @@
+name: Deploy
+
+# Every pull request runs the checks and the build. Only a push to main deploys.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: checks and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Unit tests
+        run: npm test
+
+      - name: Copy safety lint
+        run: npm run lint:vis001-copy
+
+      - name: Typecheck and build
+        run: npm run build
+
+      - name: Built assets use the Pages base path
+        run: |
+          set -eu
+          grep -Eq '(src|href)="/ghost-visualizer/assets/' dist/index.html
+          if grep -E '(src|href)="/[^g]' dist/index.html; then
+            echo "dist/index.html references a path outside /ghost-visualizer/" >&2
+            exit 1
+          fi
+
+      - name: Receipt file is in the build and unchanged
+        run: |
+          set -eu
+          cmp dist/evidence/sample-receipt.json public/evidence/sample-receipt.json
+          sha256sum dist/evidence/sample-receipt.json
+
+      - name: Package the site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: dist
+
+  deploy:
+    name: deploy to GitHub Pages
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
