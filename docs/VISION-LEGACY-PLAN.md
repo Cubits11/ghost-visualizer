@@ -217,10 +217,10 @@ The receipt for this phase is the live URL plus the verification log, in the Pha
 
 Each is its own titled PR, in a different repository, opened and not merged by the author.
 
-| Repository | Change | Status |
+| Repository | Change | State on 2026-10-24 |
 |---|---|---|
-| `cc-framework` | One README line: Ghost Visualizer as an interactive companion to the bounds, on a constructed example | Prepared |
-| `Cubits11/Cubits11` (profile) | Add Ghost Visualizer, with the demo link, to "Now" | Prepared |
+| `cc-framework` | One README sentence: Ghost Visualizer as an interactive companion to the bounds, on a constructed example. Plus regenerated evidence cards, because CI pins the README digest (§6.1). | Draft PR [cc-framework#67](https://github.com/Cubits11/cc-framework/pull/67), blocked on the Phase 1 deploy |
+| `Cubits11/Cubits11` (profile) | Add Ghost Visualizer, with the demo link, to "Now" | Draft PR [Cubits11#1](https://github.com/Cubits11/Cubits11/pull/1), blocked on the Phase 1 deploy |
 | `cubits11.github.io` | Retitle and link the live demo | **Held.** See §6.3. |
 
 Every sentence in these PRs says TOY or constructed where it describes the demo's data, and does not call the demo a result.
@@ -282,6 +282,7 @@ Not moved: `README.md` (pinned by the site's trigger, §6.1) and `docs/ghost-vis
 #### Other Phase 2 items
 
 - Metadata pass on `index.html`. Its description reads "A cinematic proof system showing why isolated AI safety scores can hide dependent failures." "Proof" overstates a toy model, and "hide" suggests concealment. Rewrite to state the band. Add Open Graph and Twitter card metadata so the link previews as a link, not a bare URL. The site's publication gate records a hash of `index.html` at `bf8d87b`; that gate is offline and checks the recorded value, not the current file [E14].
+- Third-party request. `src/styles/tokens.css:1` imports Inter, JetBrains Mono, and Space Grotesk from `fonts.googleapis.com`, so a visitor's browser contacts Google when the page loads [E23]. The repository description says the page runs in the browser with no backend; that stays true, and the font request is still a disclosure to a third party. Self-host the fonts, or state the request in the README.
 - Required status check on `main` once CI exists.
 - Weekly link-check workflow for criterion (i).
 
@@ -315,6 +316,7 @@ Conditions in §3.3. DOI minting needs the owner to connect the repository to Ze
 | GV-001 forbidden rescue: do not recast a local-only source project as a hosted interactive demo | same | The re-review must record the deployment as evidence (run URL, commit), not as an assertion. |
 | GV-001 manual trigger: hosted deployment added | same | Fires on Phase 1. Manual triggers are not checked by the site's CI. |
 | Source hashes of `index.html`, `CinematicShell.tsx`, `README.md`, `docs/ghost-visualizer-repository-vision.md` at `bf8d87b` | `publication/readiness.json` [E14] | Recorded attestation of a published revision. Offline. Does not require these files to stay unchanged. |
+| cc-framework's README SHA-256 is recorded in three evidence cards and in the site manifest that embeds them | `cc-framework/evidence-cards/` [E24] | Any README edit there fails the CI step "Evidence cards are current" until `scripts/build_evidence_cards.py` is re-run. The Phase 1b PR for cc-framework carries the regenerated cards. |
 
 ### 6.2 What this plan does not touch
 
@@ -379,6 +381,8 @@ Commands run in `~/Developer/GitHub/ghost-visualizer` unless a repository is nam
 | E20 | Profile README has no Ghost Visualizer mention | `Cubits11/Cubits11` `README.md` at `4c92781` |
 | E21 | Site reader-gate precedent | `cubits11.github.io/publication/readiness.json` `protocol` and `limits` |
 | E22 | Vision note's identity statement | `docs/ghost-visualizer-repository-vision.md` §1 and §3 |
+| E23 | Runtime request to Google Fonts | `src/styles/tokens.css:1` (`@import url("https://fonts.googleapis.com/css2?family=Inter…")`); in a local preview, `performance.getEntriesByType("resource")` listed `fonts.googleapis.com` alongside the two local assets |
+| E24 | cc-framework pins its README digest in evidence cards | In a fresh clone at `bf5740c`: `shasum -a 256 README.md` is `dd2746ac…`; `grep -rIl dd2746ac… evidence-cards` lists three cards and `site-evidence-manifest.v1.json`. After a one-sentence README edit, `PYTHONPATH=src python scripts/build_evidence_cards.py --check` prints "evidence cards are stale"; after regenerating, "evidence cards current: 8 cards". |
 
 ## Appendix B: Reader gate for criterion (iv)
 
